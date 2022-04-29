@@ -38,3 +38,26 @@
 
         echo $trozos1[0] . $categorias_navegador . $trozos2[0] . $categorias_pagina . $trozos2[2];
     }
+
+    function vMostrarCategoria($datosPagina, $categorias, $id_categoria){
+        $cadena = file_get_contents(__DIR__ . "/categoria.html");
+
+        $trozos = explode("##filaCategoriaNav##", $cadena);
+
+        $datosPagina_aux = $datosPagina->fetch_assoc();
+
+        $trozos[0] = str_replace("##tituloWeb##", $datosPagina_aux['nombre'], $trozos[0]);
+        $trozos[0] = str_replace("##imagenLogo##", $datosPagina_aux['logo'], $trozos[0]);
+
+        $categorias_navegador = "";
+        while($datosCategoria = $categorias->fetch_assoc()){
+
+            $aux = $trozos[1];
+            $aux = str_replace("##nombreCategoria##", $datosCategoria['nombre'], $aux);
+            $aux = str_replace("##categoriaId##", $datosCategoria['id'], $aux);
+            $categorias_navegador .= $aux;
+
+        }
+
+        echo $trozos[0] . $categorias_navegador . $trozos[2];
+    }

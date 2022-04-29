@@ -17,4 +17,14 @@
         case 'home':
             vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
             break;
+        case 'abrirCategoria':
+            if(isset($_GET['id'])) {
+                $id_categoria = $_GET['id'];
+                vMostrarCategoria(obtenerDatosPagina(), obtenerCategorias(), $id_categoria);
+            } else {
+                echo "Hola";
+                vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
+            }
+            break;
+
     }
