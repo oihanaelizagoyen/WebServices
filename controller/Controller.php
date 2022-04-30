@@ -26,5 +26,14 @@
                 vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
             }
             break;
+        case 'token':
+            if(isset($_POST['ftoken'])) {
+                echo "hole";
+                $token = $_POST['ftoken'];
+                setcookie("graph_token", $token, time() + (1800));
+            } else {
+                echo "falta token";
+            }
+            break;
 
     }

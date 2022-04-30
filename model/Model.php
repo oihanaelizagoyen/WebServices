@@ -25,7 +25,7 @@
 
     function obtenerServiciosApi($id_empresa, $id_servicio) {
         $curl = new Curl();
-        $respuesta = $curl->getGenerate('GET https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/'. $id_empresa .'/services/' . $id_servicio);
+        $respuesta = $curl->getGenerate('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/'. $id_empresa .'/services/' . $id_servicio);
         return $respuesta;
     }
 
@@ -42,6 +42,7 @@ $datos = obtenerServiciosCategoriaDb(1);
 while($datosServicio = $datos->fetch_assoc()){
         echo "<p>". $datosServicio['id']. ", " . $datosServicio['id_categoria'] ."</p>";
 }
-*/
+
 $datos = obtenerServiciosArray(1);
 var_dump($datos);
+*/
