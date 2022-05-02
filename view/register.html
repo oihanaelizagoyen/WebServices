@@ -36,7 +36,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="home.html">
+            <a class="navbar-brand" href="../controller/Controller.php?accion=home">
                 <img src="../imagenes/comunidad-color.png" alt="" width="34" height="34"
                      class="d-inline-block align-text-top">
                 ServiceApp
@@ -45,7 +45,9 @@
     </nav>
 </header>
 <div class="container-fluid mt-4 justify-content-md-center w-75 pt-3 pb-2 registerform">
-    <form class="row g-3 was-validated" action="#" id="formuRegistro">
+    <div id="notificacion"></div>
+    <form class="row g-3 was-validated" action="../controller/Controller.php" id="formuRegistro" method="post">
+        <input type="text" name="accion" value="registrar" hidden>
         <div class="row justify-content-md-center mt-3">
             <div class="col-md-3">
                 <h1>Registrarse</h1>
@@ -53,25 +55,25 @@
         </div>
         <div class="col-md-4">
             <label for="fnombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="fnombre" required>
+            <input name="nombre" type="text" class="form-control" id="fnombre" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba su nombre.</div>
         </div>
         <div class="col-md-5">
             <label for="fApellidos" class="form-label">Apellidos</label>
-            <input type="text" class="form-control" id="fApellidos" required>
+            <input name="apellidos" type="text" class="form-control" id="fApellidos" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba sus apellidos.</div>
         </div>
         <div class="col-md-4">
             <label for="fcorreo" class="form-label">Correo Electrónico</label>
-            <input type="email" class="form-control" id="fcorreo" required>
+            <input name="correo" type="email" class="form-control" id="fcorreo" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba su correo.</div>
         </div>
         <div class="col-md-4">
             <label for="fcontrasena" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="fcontrasena" required>
+            <input name="contrasena" type="password" class="form-control" id="fcontrasena" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba una contraseña.</div>
         </div>
@@ -83,54 +85,54 @@
         </div>
         <div class="col-12">
             <label for="fDireccion" class="form-label">Dirección (Calle, portal y piso)</label>
-            <input type="text" class="form-control" id="fDireccion" placeholder="C/Ejemplo, nº11, 1ºdcha" required>
+            <input name="direccion" type="text" class="form-control" id="fDireccion" placeholder="C/Ejemplo, nº11, 1ºdcha" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba una dirección.</div>
         </div>
         <div class="col-md-3">
             <label for="fPais" class="form-label">País</label>
-            <select id="fPais" class="form-select" required>
+            <select name="pais" id="fPais" class="form-select" required>
                 <option selected disabled value="">Elige...</option>
-                <option>...</option>
+                <option value="nada">...</option>
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor elija un país.</div>
         </div>
         <div class="col-md-3">
             <label for="fcautonoma" class="form-label">Comunidad Autónoma</label>
-            <select id="fcautonoma" class="form-select" required>
+            <select name="cAutonoma" id="fcautonoma" class="form-select" required>
                 <option selected disabled value="">Elige...</option>
-                <option>...</option>
+                <option value="nada">...</option>
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor elija una comunidad autónoma.</div>
         </div>
         <div class="col-md-3">
             <label for="fProvincia" class="form-label">Provincia</label>
-            <select id="fProvincia" class="form-select" required>
+            <select name="provincia" id="fProvincia" class="form-select" required>
                 <option selected disabled value="">Elige...</option>
-                <option>...</option>
+                <option value="nada">...</option>
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor elija una provincia.</div>
         </div>
         <div class="col-md-3">
             <label for="fMunicipio" class="form-label">Municipio</label>
-            <select id="fMunicipio" class="form-select" required>
+            <select name="municipio" id="fMunicipio" class="form-select" required>
                 <option selected disabled value="">Elige...</option>
-                <option>...</option>
+                <option value="nada">...</option>
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor elija un municipio.</div>
         </div>
         <div class="col-md-6">
             <label for="fFoto" class="form-label">Imagen de Perfil</label>
-            <input id="fFoto" type="file" class="form-control" accept="image/png, image/gif, image/jpeg, /image/jpg" aria-label="imagen" required>
+            <input name="imgPerfil" id="fFoto" type="file" class="form-control" accept="image/png, image/gif, image/jpeg, /image/jpg" aria-label="imagen" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor añada una imagen para su perfil.</div>
         </div>
         <div class="col-md-7 col-sm-12">
-            <label for="fDisp" class="form-label">Disponibilidad horaria</label>
+            <label for="fDisp" class="form-label">Disponibilidad horaria (Mantener de 00:01 a 00:01 para indicar que no trabaja)</label>
             <table id="fDisp" class="table table-striped">
                 <thead>
                     <tr>
@@ -141,77 +143,77 @@
                     <tr>
                         <th scope="col">Lunes</th>
                         <td>
-                            <select id="fLunesIni" class="form-select horas" required>
+                            <select name="lunesIni" id="fLunesIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fLunesFin" class="form-select horas" required>
+                            <select name="lunesFin" id="fLunesFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Martes</th>
                         <td>
-                            <select id="fMartesIni" class="form-select horas" required>
+                            <select name="martesIni" id="fMartesIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fMartesFin" class="form-select horas" required>
+                            <select name="martesFin" id="fMartesFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Miércoles</th>
                         <td>
-                            <select id="fMiercolesIni" class="form-select horas" required>
+                            <select name="miercolesIni" id="fMiercolesIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fMiercolesFin" class="form-select horas" required>
+                            <select name="miercolesFin" id="fMiercolesFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Jueves</th>
                         <td>
-                            <select id="fJuevesIni" class="form-select horas" required>
+                            <select name="juevesIni" id="fJuevesIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fJuevesFin" class="form-select horas" required>
+                            <select name="juevesFin" id="fJuevesFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Viernes</th>
                         <td>
-                            <select id="fViernesIni" class="form-select horas" required>
+                            <select name="viernesIni" id="fViernesIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fViernesFin" class="form-select horas" required>
+                            <select name="viernesFin" id="fViernesFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Sábado</th>
                         <td>
-                            <select id="fSabadoIni" class="form-select horas" required>
+                            <select name="sabadoIni" id="fSabadoIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fSabadoFin" class="form-select horas" required>
+                            <select name="sabadoFin" id="fSabadoFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Domingo</th>
                         <td>
-                            <select id="fDomingoIni" class="form-select horas" required>
+                            <select name="domingoIni" id="fDomingoIni" class="form-select horas">
                             </select>
                         </td>
                         <td>
-                            <select id="fDomingoFin" class="form-select horas" required>
+                            <select name="domingoFin" id="fDomingoFin" class="form-select horas">
                             </select>
                         </td>
                     </tr>
@@ -220,13 +222,13 @@
         </div>
         <div class="col-12">
             <label for="fExperiencia" class="form-label">Experiencia</label>
-            <textarea class="form-control mt-3" id="fExperiencia" rows="10" required></textarea>
+            <textarea name="experiencia" class="form-control mt-3" id="fExperiencia" rows="10" required></textarea>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba su experiencia laboral.</div>
         </div>
         <div class="col-md-12">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="fvehiculo">
+                <input name="vehiculo" class="form-check-input" type="checkbox" id="fvehiculo">
                 <label class="form-check-label" for="fvehiculo" id="fvehiculolabel">
                     Vehículo Propio (Clicar para indicar que si)
                 </label>
@@ -235,6 +237,10 @@
         <div class="row justify-content-md-center mt-3">
             <div class="col-sm-12 col-lg-3">
                 <input type="submit" class="btn btn-dark btn-lg" id="botonRegistrar" style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Registrarse">
+                <button id="carga" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                </button>
                 <p class="small fw-bold mt-2 pt-1 mb-0">¿Ya tienes una cuenta? <br><a href="#" class="link-primary">Inicia sesión</a></p>
             </div>
         </div>
@@ -245,31 +251,33 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 <script type="text/javascript">
-    $( ".horas" ).append( "<option selected>00:01</option>\n" +
-        "    <option value='01:00'>01:00</option>\n" +
-        "    <option value='02:00'>02:00</option>\n" +
-        "    <option value='03:00'>03:00</option>\n" +
-        "    <option value='04:00'>04:00</option>\n" +
-        "    <option value='05:00'>05:00</option>\n" +
-        "    <option value='06:00'>06:00</option>\n" +
-        "    <option value='07:00'>07:00</option>\n" +
-        "    <option value='08:00'>08:00</option>\n" +
-        "    <option value='09:00'>09:00</option>\n" +
-        "    <option value='10:00'>10:00</option>\n" +
-        "    <option value='11:00'>11:00</option>\n" +
-        "    <option value='12:00'>12:00</option>\n" +
-        "    <option value='13:00'>13:00</option>\n" +
-        "    <option value='14:00'>14:00</option>\n" +
-        "    <option value='15:00'>15:00</option>\n" +
-        "    <option value='16:00'>16:00</option>\n" +
-        "    <option value='17:00'>17:00</option>\n" +
-        "    <option value='18:00'>18:00</option>\n" +
-        "    <option value='19:00'>19:00</option>\n" +
-        "    <option value='20:00'>20:00</option>\n" +
-        "    <option value='21:00'>21:00</option>\n" +
-        "    <option value='22:00'>22:00</option>\n" +
-        "    <option value='23:00'>23:00</option>\n" +
-        "    <option value='23:59'>23:59</option>" );
+    document.getElementById("carga").style.display = "none";
+
+    $( ".horas" ).append( "<option selected value='00:01:00.0000000'>00:01</option>\n" +
+        "    <option value='01:00:00.0000000'>01:00</option>\n" +
+        "    <option value='02:00:00.0000000'>02:00</option>\n" +
+        "    <option value='03:00:00.0000000'>03:00</option>\n" +
+        "    <option value='04:00:00.0000000'>04:00</option>\n" +
+        "    <option value='05:00:00.0000000'>05:00</option>\n" +
+        "    <option value='06:00:00.0000000'>06:00</option>\n" +
+        "    <option value='07:00:00.0000000'>07:00</option>\n" +
+        "    <option value='08:00:00.0000000'>08:00</option>\n" +
+        "    <option value='09:00:00.0000000'>09:00</option>\n" +
+        "    <option value='10:00:00.0000000'>10:00</option>\n" +
+        "    <option value='11:00:00.0000000'>11:00</option>\n" +
+        "    <option value='12:00:00.0000000'>12:00</option>\n" +
+        "    <option value='13:00:00.0000000'>13:00</option>\n" +
+        "    <option value='14:00:00.0000000'>14:00</option>\n" +
+        "    <option value='15:00:00.0000000'>15:00</option>\n" +
+        "    <option value='16:00:00.0000000'>16:00</option>\n" +
+        "    <option value='17:00:00.0000000'>17:00</option>\n" +
+        "    <option value='18:00:00.0000000'>18:00</option>\n" +
+        "    <option value='19:00:00.0000000'>19:00</option>\n" +
+        "    <option value='20:00:00.0000000'>20:00</option>\n" +
+        "    <option value='21:00:00.0000000'>21:00</option>\n" +
+        "    <option value='22:00:00.0000000'>22:00</option>\n" +
+        "    <option value='23:00:00.0000000'>23:00</option>\n" +
+        "    <option value='23:59:00.0000000'>23:59</option>" );
 
     $('#formuRegistro').on('submit', function() {
         if ($('#fcontrasena').val() !== $('#frepcontrasena').val()){
@@ -277,11 +285,103 @@
             window.location.hash = '#fcontrasena';
             return false;
         }
+
+        let inicio_arr = $('#fLunesIni').val().split(":");
+        let final_arr = $('#fLunesFin').val().split(":");
+        let inicio = inicio_arr[0];
+        let final = final_arr[0];
+
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>lunes</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+        inicio_arr = $('#fMartesIni').val().split(":");
+        final_arr = $('#fMartesFin').val().split(":");
+        inicio = inicio_arr[0];
+        final = final_arr[0];
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>martes</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+        inicio_arr = $('#fMiercolesIni').val().split(":");
+        final_arr = $('#fMiercolesFin').val().split(":");
+        inicio = inicio_arr[0];
+        final = final_arr[0];
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>miercoles</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+        inicio_arr = $('#fJuevesIni').val().split(":");
+        final_arr = $('#fJuevesFin').val().split(":");
+        inicio = inicio_arr[0];
+        final = final_arr[0];
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>jueves</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+        inicio_arr = $('#fViernesIni').val().split(":");
+        final_arr = $('#fViernesFin').val().split(":");
+        inicio = inicio_arr[0];
+        final = final_arr[0];
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>viernes</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+        inicio_arr = $('#fSabadoIni').val().split(":");
+        final_arr = $('#fSabadoFin').val().split(":");
+        inicio = inicio_arr[0];
+        final = final_arr[0];
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>martes</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+        inicio_arr = $('#fDomingoIni').val().split(":");
+        final_arr = $('#fDomingoFin').val().split(":");
+        inicio = inicio_arr[0];
+        final = final_arr[0];
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  El <strong>domingo</strong> no puede terminar de trabajar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location.hash = '#notificacion';
+            return false;
+        }
+
+        document.getElementById("carga").style.display = "inline";
+        document.getElementById("botonRegistrar").disabled = true;
+
+        /*
         $(':input','#formuRegistro')
             .not(':button, :submit, :reset, :hidden')
             .val('')
             .prop('checked', false)
             .prop('selected', false);
+         */
         return true;
     });
 </script>

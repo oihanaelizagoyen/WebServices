@@ -2,7 +2,7 @@
 
     include __DIR__ . '/../model/NumberConvert.php';
 
-    function vMostrarHome ($datosPagina, $categorias){
+    function vMostrarHome ($datosPagina, $categorias, $errores = "ok"){
         $cadena = file_get_contents(__DIR__ . "/home.html");
 
         $trozos1 = explode("##filaCategoriaNav##", $cadena);
@@ -14,6 +14,19 @@
         $trozos1[0] = str_replace("##imagenLogo##", $datosPagina_aux['logo'], $trozos1[0]);
         $trozos2[0] = str_replace("##imagenDescripcion##", $datosPagina_aux['imagen_descripcion'], $trozos2[0]);
         $trozos2[0] = str_replace("##descripcion##", $datosPagina_aux['descripcion'], $trozos2[0]);
+
+        //Notificaciones de errores
+        if ($errores == "ok"){
+            $trozos2[0] = str_replace("##visibilidad##", "hidden", $trozos2[0]);
+        } elseif ($errores == "error_empleado_db"){
+            $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
+            $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+            $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la conexión con la base de datos, no se ha creado el usuario", $trozos2[0]);
+        } elseif (($errores == "error_empleado_api") || ($errores == "error_empresa_api")){
+            $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
+            $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+            $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la conexión con Microsoft 365, no se ha creado el usuario, verificar token", $trozos2[0]);
+        }
 
         $categorias_navegador = "";
         $categorias_pagina = "";
