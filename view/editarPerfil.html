@@ -33,56 +33,17 @@
     </style>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../controller/Controller.php?accion=home">
-                <img src="../imagenes/##imagenLogo##" alt="" width="34" height="34" class="d-inline-block align-text-top">
-                ##tituloWeb##
-            </a>
-        </div>
-    </nav>
-</header>
+##header##
 <div class="container-fluid mt-4 justify-content-md-center w-75 pt-3 pb-2 registerform">
     <div id="notificacion"></div>
     <form class="row g-3 was-validated" action="../controller/Controller.php" id="formuRegistro" method="post" enctype="multipart/form-data">
-        <input type="text" name="accion" value="registrar" hidden>
+        <input type="text" name="accion" value="editarPerfil" hidden>
         <div class="row justify-content-md-center mt-3">
             <div class="col-md-3">
-                <h1>Registrarse</h1>
+                <h1>Editar Perfil</h1>
             </div>
         </div>
-        <div class="col-md-4">
-            <label for="fnombre" class="form-label">Nombre</label>
-            <input name="nombre" type="text" class="form-control" id="fnombre" required>
-            <div class="valid-feedback">Válido.</div>
-            <div class="invalid-feedback">Por favor, escriba su nombre.</div>
-        </div>
-        <div class="col-md-5">
-            <label for="fApellidos" class="form-label">Apellidos</label>
-            <input name="apellidos" type="text" class="form-control" id="fApellidos" required>
-            <div class="valid-feedback">Válido.</div>
-            <div class="invalid-feedback">Por favor, escriba sus apellidos.</div>
-        </div>
-        <div class="col-md-4">
-            <label for="fcorreo" class="form-label">Correo Electrónico</label>
-            <input name="correo" type="email" class="form-control" id="fcorreo" required>
-            <div class="valid-feedback">Válido.</div>
-            <div class="invalid-feedback">Por favor, escriba su correo.</div>
-        </div>
-        <div class="col-md-4">
-            <label for="fcontrasena" class="form-label">Contraseña</label>
-            <input name="contrasena" type="password" class="form-control" id="fcontrasena" required>
-            <div class="valid-feedback">Válido.</div>
-            <div class="invalid-feedback">Por favor, escriba una contraseña.</div>
-        </div>
-        <div class="col-md-4">
-            <label for="frepcontrasena" class="form-label">Repetir Contraseña</label>
-            <input type="password" class="form-control" id="frepcontrasena" required>
-            <div class="valid-feedback">Válido.</div>
-            <div class="invalid-feedback">Por favor, repita la contraseña.</div>
-        </div>
-        <div class="col-12">
+        <div class="col-3">
             <label for="fDireccion" class="form-label">Dirección (Calle, portal y piso)</label>
             <input name="direccion" type="text" class="form-control" id="fDireccion" placeholder="C/Ejemplo, nº11, 1ºdcha" required>
             <div class="valid-feedback">Válido.</div>
@@ -108,16 +69,16 @@
             <div class="invalid-feedback">Indique una Provincia válida.</div>
         </div>
         <div id="capaPoblaciones" class="col-md-3">
-            <label for="poblacion" class="form-label">Poblacion</label>
-            <select name="poblacion" id="poblacion" class="form-select" required>
+            <label for="poblacion" class="form-label">Municipio</label>
+            <select name="municipio" id="poblacion" class="form-select" required>
                 <option selected disabled value="">Elige...</option>
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Indique una Poblacion válida.</div>
         </div>
         <div class="col-md-6">
-            <label for="fFoto" class="form-label">Imagen de Perfil</label>
-            <input name="imgPerfil" id="fFoto" type="file" class="form-control" accept="image/png, image/gif, image/jpeg, /image/jpg" aria-label="imagen" required>
+            <label for="fFoto" class="form-label">Imagen de Perfil (No seleccionar para mantener la actual)</label>
+            <input name="imgPerfil" id="fFoto" type="file" class="form-control" accept="image/png, image/gif, image/jpeg, /image/jpg" aria-label="imagen">
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor, añada una imagen para su perfil.</div>
         </div>
@@ -220,18 +181,17 @@
             <div class="form-check">
                 <input name="vehiculo" class="form-check-input" type="checkbox" id="fvehiculo">
                 <label class="form-check-label" for="fvehiculo" id="fvehiculolabel">
-                    Vehículo Propio (Clicar para indicar que si)
+                    Vehículo Propio (La casilla marcada indica que dispone de el)
                 </label>
             </div>
         </div>
         <div class="row justify-content-md-center mt-3">
             <div class="col-sm-12 col-lg-3">
-                <input type="submit" class="btn btn-dark btn-lg" id="botonRegistrar" style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Registrarse">
+                <input type="submit" class="btn btn-dark btn-lg" id="botonRegistrar" style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Editar perfil">
                 <button id="carga" class="btn btn-primary" type="button" disabled>
                     <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                     <span class="visually-hidden">Loading...</span>
                 </button>
-                <p class="small fw-bold mt-2 pt-1 mb-0">¿Ya tienes una cuenta? <br><a href="../controller/Controller.php?accion=abrirIniciarSesion" class="link-primary">Inicia sesión</a></p>
             </div>
         </div>
     </form>

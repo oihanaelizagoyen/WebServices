@@ -1,365 +1,301 @@
 <?php
-    ini_set('display_errors',1);
-    ini_set('display_startup_errors',error_reporting(E_ALL));
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', error_reporting(E_ALL));
+session_start();
 
-    include __DIR__ ."/../model/Model.php";
-    include __DIR__ ."/../view/View.php";
+include __DIR__ . "/../model/Model.php";
+include __DIR__ . "/../view/View.php";
+$logedin = false;
 
-    if(isset($_GET['accion'])) {
-        $accion = $_GET['accion'];
-    } elseif(isset($_POST['accion'])) {
-        $accion = $_POST['accion'];
-    } else {
-        $accion = 'home';
-    }
+if (isset($_GET['accion'])) {
+    $accion = $_GET['accion'];
+} elseif (isset($_POST['accion'])) {
+    $accion = $_POST['accion'];
+} else {
+    $accion = 'home';
+}
 
-    switch ($accion) {
-        case 'home':
-            vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
-            break;
-        case 'abrirCategoria':
-            if(isset($_GET['id'])) {
-                $id_categoria = $_GET['id'];
-                vMostrarCategoria(obtenerDatosPagina(), obtenerCategorias(), $id_categoria);
-            } else {
-                echo "Hola";
-                vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
-            }
-            break;
-        case 'registrar':
-            if(isset($_POST['nombre']) &&
-                isset($_POST['apellidos']) &&
-                isset($_POST['correo']) &&
-                isset($_POST['contrasena']) &&
-                isset($_POST['direccion']) &&
-                isset($_POST['pais']) &&
-                isset($_POST['cAutonoma']) &&
-                isset($_POST['provincia']) &&
-                isset($_POST['municipio']) &&
-                isset($_POST['imgPerfil']) &&
-                isset($_POST['lunesIni']) &&
-                isset($_POST['lunesFin']) &&
-                isset($_POST['martesIni']) &&
-                isset($_POST['martesFin']) &&
-                isset($_POST['miercolesIni']) &&
-                isset($_POST['miercolesFin']) &&
-                isset($_POST['juevesIni']) &&
-                isset($_POST['juevesFin']) &&
-                isset($_POST['viernesIni']) &&
-                isset($_POST['viernesFin']) &&
-                isset($_POST['sabadoIni']) &&
-                isset($_POST['sabadoFin']) &&
-                isset($_POST['domingoIni']) &&
-                isset($_POST['domingoFin']) &&
-                isset($_POST['experiencia'])) {
+if (isset($_SESSION['id_usuario']) && isset($_SESSION['contrasena']) && isset($_SESSION['tiempo'])) {
+    $user = $_SESSION['id_usuario'];
+    $passwd = $_SESSION['contrasena'];
+    $tiempo = $_SESSION['tiempo'];
+    $logedin = true;
 
-                $nombre = $_POST['nombre'] . ", " . $_POST['apellidos'];
-                $correo = $_POST['correo'];
-                $contrasena = $_POST['contrasena'];
-                $direccion = $_POST['direccion'];
-                $pais = $_POST['pais'];
-                $cAutonoma = $_POST['cAutonoma'];
-                $provincia = $_POST['provincia'];
-                $municipio = $_POST['municipio'];
-                $imgPerfil = $_POST['imgPerfil'];
-                $lunesIni = $_POST['lunesIni'];
-                $lunesFin = $_POST['lunesFin'];
-                $martesIni = $_POST['martesIni'];
-                $martesFin = $_POST['martesFin'];
-                $miercolesIni = $_POST['miercolesIni'];
-                $miercolesFin = $_POST['miercolesFin'];
-                $juevesIni = $_POST['juevesIni'];
-                $juevesFin = $_POST['juevesFin'];
-                $viernesIni = $_POST['viernesIni'];
-                $viernesFin = $_POST['viernesFin'];
-                $sabadoIni = $_POST['sabadoIni'];
-                $sabadoFin = $_POST['sabadoFin'];
-                $domingoIni = $_POST['domingoIni'];
-                $domingoFin = $_POST['domingoFin'];
-                $experiencia = $_POST['experiencia'];
+    /*
+if ((time() - $tiempo) > 600) {
+    $accion = "abrirIniciarSesion";
+    session_unset();
+} else {
+    $_SESSION['tiempo'] = time();
+}
+*/
+}
 
-                $vehiculo = 0;
+switch ($accion) {
+    case 'home':
+        if ($logedin == true) {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias());
+        }
+        break;
+    case 'abrirCategoria':
+        if (isset($_GET['id'])) {
+            $id_categoria = $_GET['id'];
+            $datosServiciosArray = obtenerDatosServiciosArray($id_categoria, null);
 
-                if(isset($_POST['vehiculo'])){
-                    if ($_POST['vehiculo'] == 'on'){
-                        $vehiculo = 1;
-                    }
+            if (!$datosServiciosArray[count($datosServiciosArray)-1]) {
+                if ($logedin == true) {
+                    vMostrarCategoria($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosServiciosArray, $id_categoria, obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
                 } else {
-                    $vehiculo = 0;
+                    vMostrarCategoria($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosServiciosArray, $id_categoria);
                 }
+            } else {
+                if ($logedin == true) {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api_categoria");
+                } else {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_api_categoria");
+                }
+            }
+        } else {
+            if ($logedin == true) {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+            }
+        }
+        break;
+    case 'ordenarServicios':
+        if (isset($_GET['id'])) {
+            $id_categoria = $_GET['id'];
+            if (isset($_GET['valorOrdenacion'])) {
+                $valorOrdenacion = $_GET['valorOrdenacion'];
+                $datosServiciosArray = obtenerDatosServiciosArray($id_categoria, $valorOrdenacion);
+                if (!$datosServiciosArray[count($datosServiciosArray) - 1]) {
+                    vMostrarServiciosCategoriaOrdenados($datosServiciosArray);
+                } else {
+                    echo "";
+                }
+            } else {
+                $datosServiciosArray = obtenerDatosServiciosArray($id_categoria, null);
+                if (!$datosServiciosArray[3]) {
+                    vMostrarServiciosCategoriaOrdenados($datosServiciosArray);
+                } else {
+                    echo "";
+                }
+            }
+        } else {
+            echo "";
+        }
+        break;
+    case 'abrirServicio':
+        if (isset($_GET['id'])) {
+            $id_servicio = $_GET['id'];
+            $datosServicioArray = obtenerDatosServicioArray($id_servicio);
+            if (!$datosServicioArray[count($datosServicioArray) - 1]) {
+                if ($logedin == true) {
+                    vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosServicioArray, obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+                } else {
+                    vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosServicioArray);
+                }
+            } else {
+                if ($logedin == true) {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api_servicio");
+                } else {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_api_servicio");
+                }
+            }
+        } else {
+            if ($logedin == true) {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+            }
+        }
+        break;
+    case 'obtenerProvincias':
+        if (isset($_GET['id'])) {
+            $id_comunidad_autonoma = $_GET['id'];
+        } else {
+            $id_comunidad_autonoma = 1;
+        }
+        vMostrarProvincias(obtenerProvinciasComunidadAutonoma($id_comunidad_autonoma));
+        break;
+    case 'obtenerPoblaciones':
+        if (isset($_GET['id'])) {
+            $id_provincia = $_GET['id'];
+        } else {
+            $id_provincia = 1;
+        }
+        vMostrarPoblaciones(obtenerPoblacionesProvincia($id_provincia));
+        break;
+    case 'realizarReserva':
+        if (isset($_POST['idServicio'])) {
+            $id_servicio = $_POST['idServicio'];
+            if ($logedin == true) {
+                vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosServicioArray($id_servicio), validarReserva(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+            } else {
+                vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosServicioArray($id_servicio), validarReserva(), null);
+            }
+        } else {
+            if ($logedin == true) {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_formulario_reserva");
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_formulario_reserva");
+            }
+        }
+        break;
+    case 'abrirPerfil':
+        if (isset($_GET['id'])) {
+            $id_usuario = $_GET['id'];
+            $datosPerfilArray = obtenerDatosPerfilArray($id_usuario);
+            if (!$datosPerfilArray[count($datosPerfilArray) - 1]) {
+                if ($logedin == true) {
+                    vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosPerfilArray, obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+                } else {
+                    vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosPerfilArray);
+                }
+            } else {
+                if ($logedin == true) {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api_perfil");
+                } else {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_api_perfil");
+                }
+            }
+        } elseif (isset($_SESSION['id_usuario'])) {
+            $id_usuario = $_SESSION['id_usuario'];
+            $datosPerfilArray = obtenerDatosPerfilArray($id_usuario);
+            if (!$datosPerfilArray[count($datosPerfilArray) - 1]) {
+                vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosPerfilArray, obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api_perfil");
+            }
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'cancelarCita':
+        if (isset($_GET['idUsuario'])) {
+            $id_usuario = $_GET['idUsuario'];
+            if ($logedin == true) {
+                vMostrarPerfil(obtenerDatosPagina(), obtenerCategorias(), obtenerDatosPerfilArray($id_usuario), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), validarCancelarCita());
+            } else {
+                vMostrarPerfil(obtenerDatosPagina(), obtenerCategorias(), obtenerDatosPerfilArray($id_usuario), null, validarCancelarCita());
+            }
+        } else {
+            if ($logedin == true) {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+            }
+        }
+        break;
+    case 'abrirRegistrar':
+        if ($logedin == false) {
+            vMostrarRegistrar(obtenerDatosPagina(), obtenerComunidadesAutonomas(), obtenerProvincias(), obtenerPoblaciones());
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'abrirIniciarSesion':
+        if ($logedin == false) {
+            vMostrarIniciarSesion(obtenerDatosPagina());
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'abrirNuevoServicio':
+        if ($logedin == true) {
+            vMostrarNuevoServicio(obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'abrirEditarPerfil':
+        if ($logedin == true) {
+            //Me faltaría obtener los datos de la base y del api -->Modificar Empresa, Empleado API Y BBDD
+            vMostrarEditarPerfil(obtenerDatosPagina(), obtenerComunidadesAutonomas(), obtenerProvincias(), obtenerPoblaciones());
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'nuevoServicio':
+        if ($logedin == true) {
+            if (isset($_SESSION['id_usuario'])) {
+                $respuesta = crearServicio($_SESSION['id_usuario']);
+                if ($respuesta == 'ok') {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "servicio_ok");
+                } else {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_nuevo_servicio");
+                }
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+            }
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+        }
+        break;
+    case 'iniciarSesion':
+        if ($logedin == false) {
+            $erroresinicio = iniciarSesion();
+            if ($erroresinicio == "sesion_iniciada") {
+                $logedin = true;
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "inicio_ok");
+            } else {
+                vMostrarIniciarSesion(obtenerDatosPagina(), "error");
+            }
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'registrar':
+        if ($logedin == false) {
+            $empresa = crearEmpresaApi();
+            if (isset($empresa['id'])) {
 
-                //Datos para crear empresa
-                $TimeSlots_ = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                    "startTime" => "00:01:00.0000000",
-                    "endTime" => "23:59:00.0000000");
-                $TimeSlots = array($TimeSlots_);
-                $businessHoursMonday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "monday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHoursTuesday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "tuesday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHoursWednesday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "wednesday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHoursThursday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "thursday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHoursFriday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "friday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHoursSaturday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "saturday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHoursSunday = array(
-                    "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                    "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                    "day" => "sunday",
-                    "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                    "timeSlots" => $TimeSlots
-                );
-                $businessHours = array($businessHoursMonday, $businessHoursTuesday, $businessHoursWednesday, $businessHoursThursday, $businessHoursFriday, $businessHoursSaturday, $businessHoursSunday);
+                $id_empresa = $empresa['id'];
+                $empleado = crearEmpleadoApi($id_empresa);
 
-                $address = array(
-                    "city" => $municipio,
-                    "countryOrRegion" => $pais,
-                    "state" => $provincia,
-                    "street" => $direccion
-                );
+                if (isset($empleado['id'])) {
+                    $id_empleado = $empleado['id'];
 
-                $datos_empresa = array(
-                    "displayName" => $nombre . "_empresa" . rand(1, 10000),
-                    "address" => $address,
-                    "timeZone" => "Europe/Paris",
-                    "workingHours@odata.type" => "#Collection(microsoft.graph.bookingWorkHours)",
-                    "businessHours" => $businessHours,
-                    "defaultCurrencyIso" => "EUR"
-                );
+                    $comprobacion = crearEmpleadoDb($id_empleado, $id_empresa);
 
-                $empresa = crearEmpresaApi($datos_empresa);
-                if (isset($empresa['id'])){
-
-                    $id_empresa = $empresa['id'];
-
-                    //Datos para crear usuario
-                    $workingHours = array();
-
-                    $ini_horas = explode(":", $lunesIni);
-                    $fin_horas = explode(":", $lunesFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $lunesIni,
-                            "endTime" => $lunesFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursMonday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "monday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursMonday;
-                    }
-
-                    $ini_horas = explode(":", $martesIni);
-                    $fin_horas = explode(":", $martesFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $martesIni,
-                            "endTime" => $martesFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursTuesday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "tuesday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursTuesday;
-                    }
-
-                    $ini_horas = explode(":", $miercolesIni);
-                    $fin_horas = explode(":", $miercolesFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $miercolesIni,
-                            "endTime" => $miercolesFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursWednesday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "wednesday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursWednesday;
-                    }
-
-                    $ini_horas = explode(":", $juevesIni);
-                    $fin_horas = explode(":", $juevesFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $juevesIni,
-                            "endTime" => $juevesFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursThursday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "thursday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursThursday;
-                    }
-
-                    $ini_horas = explode(":", $viernesIni);
-                    $fin_horas = explode(":", $viernesFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $viernesIni,
-                            "endTime" => $viernesFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursFriday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "friday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursFriday;
-                    }
-
-                    $ini_horas = explode(":", $sabadoIni);
-                    $fin_horas = explode(":", $sabadoFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $sabadoIni,
-                            "endTime" => $sabadoFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursSaturday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "saturday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursSaturday;
-                    }
-
-                    $ini_horas = explode(":", $domingoIni);
-                    $fin_horas = explode(":", $domingoFin);
-                    $int_ini_hora = (int) $ini_horas[0];
-                    $int_fin_hora = (int) $fin_horas[0];
-                    if (($int_ini_hora - $int_fin_hora) != 0){
-                        $TimeSlots_ = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
-                            "startTime" => $domingoIni,
-                            "endTime" => $domingoFin);
-                        $TimeSlots = array($TimeSlots_);
-                        $businessHoursSunday = array(
-                            "@odata.type" => "#microsoft.graph.bookingWorkHours",
-                            "day@odata.type" => "#microsoft.graph.dayOfWeek",
-                            "day" => "sunday",
-                            "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
-                            "timeSlots" => $TimeSlots
-                        );
-                        $workingHours[] = $businessHoursSunday;
-                    }
-
-                    $datos_empleado = array(
-                        "@odata.type" => "#microsoft.graph.bookingStaffMember",
-                        "availabilityIsAffectedByPersonalCalendar" => "true",
-                        "displayName" => $nombre,
-                        "emailAddress" => $correo,
-                        "role" => "administrator",
-                        "timeZone" => "Europe/Paris",
-                        "useBusinessHours" => "false",
-                        "workingHours@odata.type" => "#Collection(microsoft.graph.bookingWorkHours)",
-                        "workingHours" => $workingHours
-                    );
-
-                    $empleado = crearEmpleadoApi($datos_empleado, $id_empresa);
-
-                    if (isset($empleado['id'])){
-                        $id_empleado = $empleado['id'];
-
-                        $comprobacion = crearEmpleadoDb($id_empleado, $contrasena, $vehiculo, $correo, $experiencia, $id_empresa);
-
-                        if ($comprobacion = "ok"){
-                            //iniciar sesion
-                            vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
-                        } else {
-                            //Error al crear el empleado en la base de datos
-                            vMostrarHome(obtenerDatosPagina(), obtenerCategorias(), "error_empleado_db");
-                        }
-
+                    if ($comprobacion = "ok") {
+                        //iniciar sesion
+                        vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "registro_ok");
                     } else {
-                        //Error al crear el empleado
-                        vMostrarHome(obtenerDatosPagina(), obtenerCategorias(), "error_empleado_api");
+                        //Error al crear el empleado en la base de datos
+                        vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_empleado_db");
                     }
 
                 } else {
-                    //Error al crear la empresa
-                    vMostrarHome(obtenerDatosPagina(), obtenerCategorias(), "error_empresa_api");
+                    //Error al crear el empleado
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_empleado_api");
                 }
+
             } else {
-                //Error al enviar el formulario
-                vMostrarHome(obtenerDatosPagina(), obtenerCategorias());
+                //Error al crear la empresa
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_empresa_api");
             }
-
-
-            break;
-        case 'token':
-            if(isset($_POST['ftoken'])) {
-                $token = $_POST['ftoken'];
-                setcookie("graph_token", $token, time() + (1800));
-                echo "Token guardado";
-            } else {
-                echo "falta token";
-            }
-            break;
-
-    }
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'token':
+        if (isset($_POST['ftoken'])) {
+            $token = $_POST['ftoken'];
+            setcookie("graph_token", $token, time() + (1800));
+            echo "Token guardado";
+        } else {
+            echo "falta token";
+        }
+        break;
+    case 'cerrarSesion':
+        if ($logedin == true) {
+            $logedin = false;
+            session_unset();
+        }
+        vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "ok_cerrarsesion");
+        break;
+}

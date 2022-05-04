@@ -63,9 +63,9 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="./home.html">
-                <img src="../imagenes/comunidad-color.png" alt="" width="34" height="34" class="d-inline-block align-text-top">
-                ServiceApp
+            <a class="navbar-brand" href="../controller/Controller.php?accion=home">
+                <img src="../imagenes/##imagenLogo##" alt="" width="34" height="34" class="d-inline-block align-text-top">
+                ##tituloWeb##
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -73,22 +73,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./home.html">Inicio</a>
+                        <a class="nav-link active" aria-current="page" href="../controller/Controller.php?accion=home">Inicio</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Categoría
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Cuidado de niños</a></li>
-                            <li><a class="dropdown-item" href="#">Cuidado de personas dependientes</a></li>
-                            <li><a class="dropdown-item" href="#">Cuidado de Mascotas</a></li>
+                            ##filaCategoriaNav##
+                            <li><a class="dropdown-item" href="../controller/Controller.php?accion=abrirCategoria&id=##categoriaId##">##nombreCategoria##</a></li>
+                            ##filaCategoriaNav##
                         </ul>
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <a class="nav-link" href="./register.html">Registrarse</a>
-                    <a href="./login.html" class="btn login">Iniciar Sesión</a>
+                    <a class="nav-link" href="../view/register.html">Registrarse</a>
+                    <a href="../view/login.html" class="btn login">Iniciar Sesión</a>
                 </div>
             </div>
         </div>
@@ -98,20 +98,18 @@
 <!-- Para hacerlo dinámico, copiar cada div id card y cambiar el id collapsedX y el href-->
 <!-- Otra cosa que se puede cambiar es el collapse show, show es para mostrarlo nada mas abrir -->
 <div class="container mt-3 mb-5">
+    <div class="alert alert-##tipoAlerta## alert-dismissible" role="alert" ##visibilidad##>
+        ##mensajeNotificacion##
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="row m-md-5">
         <div class="col-sm-3">
-            <img src="../imagenes/foto_perfil.png" class="img-fluid rounded-start"
+            <img src="../imagenes/fotosperfil/##fotoPerfil##" class="img-fluid rounded-start"
                                    alt="foto de perfil"></div>
         <div class="col-sm-9">
-            <h2>Nombre persona</h2>
+            <h2>##nombrePersona##</h2>
             <h3 class="fs-5">Experiencia: </h3>
-            <p class="ms-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus, dolor eget bibendum
-                tempus, dui elit varius mi, id vestibulum libero enim ut lectus. Aenean sodales lectus dolor, quis
-                venenatis urna dignissim ut. Phasellus facilisis eu tortor sed sollicitudin. Sed faucibus ante sed mi
-                aliquam efficitur vel in lectus. Ut id sollicitudin libero. In cursus, sapien ut venenatis dapibus, mi
-                magna convallis lacus, quis egestas nunc justo eu nulla. Maecenas lobortis mollis pretium. Cras faucibus
-                interdum quam et dignissim. In hac habitasse platea dictumst. Donec quis feugiat orci. Sed rutrum lectus
-                a sapien pharetra ullamcorper. Aliquam erat volutpat.</p>
+            <p class="ms-5">##experiencia##</p>
             <br>
             <h3 class="fs-5">Disponibilidad: </h3>
             <div class="table-responsive-sm ms-5">
@@ -124,38 +122,20 @@
                     </tr>
                     </thead>
                     <tbody>
+                    ##filaDisponibilidad##
                     <tr>
-                        <th scope="row">Lunes</th>
-                        <td>12:00</td>
-                        <td>19:00</td>
+                        <th scope="row">##dia##</th>
+                        <td>##horaInicial##</td>
+                        <td>##horaFinal##</td>
                     </tr>
-                    <tr>
-                        <th scope="row">Martes</th>
-                        <td>12:00</td>
-                        <td>19:00</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Miércoles</th>
-                        <td>12:00</td>
-                        <td>19:00</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Jueves</th>
-                        <td>12:00</td>
-                        <td>19:00</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Viernes</th>
-                        <td>14:00</td>
-                        <td>16:00</td>
-                    </tr>
+                    ##filaDisponibilidad##
                     </tbody>
                 </table>
             </div>
             <br>
             <h3 class="fs-5">Vehículo propio: </h3>
-            <p class="ms-5">Sí</p>
-            <button type="button" class="btn btn-primary p-2 mt-2 mb-2 fw-bold float-end" id="editar_perfil">Editar perfil</button>
+            <p class="ms-5">##vehiculoPropio##</p>
+            <a type="button" class="btn btn-primary p-2 mt-2 mb-2 fw-bold float-end" id="editar_perfil" href="../controller/Controller.php?accion=editarPerfil">Editar perfil</a>
         </div>
     </div>
     <div class="row mt-5">
@@ -166,7 +146,7 @@
                         aria-selected="true">Servicios
                 </button>
                 <button class="nav-link" id="nav-citas-tab" data-bs-toggle="tab" data-bs-target="#nav-citas"
-                        type="button" role="tab" aria-controls="nav-citas" aria-selected="false">Próximas citas
+                        type="button" role="tab" aria-controls="nav-citas" aria-selected="false" ##visbilidad##>Próximas citas
                 </button>
             </div>
         </nav>
@@ -174,124 +154,86 @@
             <div class="tab-pane fade show active" id="nav-servicios" role="tabpanel"
                  aria-labelledby="nav-servicios-tab">
                 <ul>
+                    ##filaServicio##
                     <li>
                         <div class="card ms-5 me-5 mt-4 mb-4 p-3 tarjeta_contenido" >
                             <div class="row g-0">
                                 <div class="col-md">
                                     <div class="card-body">
-                                        <h5 class="card-title fw-bold fs-4">Nombre servicio</h5>
+                                        <h5 class="card-title fw-bold fs-4">##nombreServicio##</h5>
                                         <div class="container">
                                             <div class="row">
                                                 <div class="mt-2">
                                                     <p class="card-text fw-bold">Descripción:</p>
-                                                    <p class="card-text ms-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus, dolor eget bibendum
-                                                        tempus, dui elit varius mi, id vestibulum libero enim ut lectus. Aenean sodales lectus dolor, quis
-                                                        venenatis urna dignissim ut. Phasellus facilisis eu tortor sed sollicitudin. Sed faucibus ante sed mi
-                                                        aliquam efficitur vel in lectus. Ut id sollicitudin libero. In cursus, sapien ut venenatis dapibus, mi
-                                                        magna convallis lacus, quis egestas nunc justo eu nulla. Maecenas lobortis mollis pretium. Cras faucibus
-                                                        interdum quam et dignissim. In hac habitasse platea dictumst. Donec quis feugiat orci. Sed rutrum lectus
-                                                        a sapien pharetra ullamcorper. Aliquam erat volutpat.
-                                                    </p>
+                                                    <p class="card-text ms-3">##descripcionServicio##</p>
                                                 </div>
                                                 <div class="col-lg-4 col-sm-12 mt-2 d-flex justify-content-center mt-2">
                                                     <p class="card-text fw-bold">Fecha:</p>
-                                                    <p class="card-text ms-3">22/04/2022</p>
+                                                    <p class="card-text ms-3">##fechaServicio##</p>
                                                 </div>
                                                 <div class="col-lg-4 col-sm-12 mt-2 d-flex justify-content-center mt-2">
                                                     <p class="card-text fw-bold">Localización:</p>
-                                                    <p class="card-text ms-3">Pamplona, Navarra</p>
+                                                    <p class="card-text ms-3">##localizacionServicio##</p>
                                                 </div>
                                                 <div class="col-lg-4 col-sm-12 mt-2 d-flex justify-content-center mt-2">
                                                     <p class="card-text fw-bold">Precio:</p>
-                                                    <p class="card-text ms-3">10$/hora</p>
+                                                    <p class="card-text ms-3">##precioServicio## €/hora</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-primary p-2 mt-4 fw-bold float-end ver_servicio" href="./servicio.html">Ver servicio</button>
+                                        <a type="button" class="btn btn-primary p-2 mt-4 fw-bold float-end ver_servicio" href="../controller/Controller.php?accion=abrirServicio&id=##idServicio##">Ver servicio</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <div class="card ms-5 me-5 mt-4 mb-4 p-3 tarjeta_contenido" >
-                            <div class="row g-0">
-                                <div class="col-md">
-                                    <div class="card-body">
-                                        <h5 class="card-title fw-bold fs-4">Nombre servicio</h5>
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="mt-2">
-                                                    <p class="card-text fw-bold">Descripción:</p>
-                                                    <p class="card-text ms-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus, dolor eget bibendum
-                                                        tempus, dui elit varius mi, id vestibulum libero enim ut lectus. Aenean sodales lectus dolor, quis
-                                                        venenatis urna dignissim ut. Phasellus facilisis eu tortor sed sollicitudin. Sed faucibus ante sed mi
-                                                        aliquam efficitur vel in lectus. Ut id sollicitudin libero. In cursus, sapien ut venenatis dapibus, mi
-                                                        magna convallis lacus, quis egestas nunc justo eu nulla. Maecenas lobortis mollis pretium. Cras faucibus
-                                                        interdum quam et dignissim. In hac habitasse platea dictumst. Donec quis feugiat orci. Sed rutrum lectus
-                                                        a sapien pharetra ullamcorper. Aliquam erat volutpat.
-                                                    </p>
-                                                </div>
-                                                <div class="col-lg-4 col-sm-12 mt-2 d-flex justify-content-center mt-2">
-                                                    <p class="card-text fw-bold">Fecha:</p>
-                                                    <p class="card-text ms-3">22/04/2022</p>
-                                                </div>
-                                                <div class="col-lg-4 col-sm-12 mt-2 d-flex justify-content-center mt-2">
-                                                    <p class="card-text fw-bold">Localización:</p>
-                                                    <p class="card-text ms-3">Pamplona, Navarra</p>
-                                                </div>
-                                                <div class="col-lg-4 col-sm-12 mt-2 d-flex justify-content-center mt-2">
-                                                    <p class="card-text fw-bold">Precio:</p>
-                                                    <p class="card-text ms-3">10$/hora</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="button" class="btn btn-primary p-2 mt-4 fw-bold float-end ver_servicio">Ver servicio</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    ##filaServicio##
                 </ul>
             </div>
-            <div class="tab-pane fade" id="nav-citas" role="tabpanel" aria-labelledby="nav-citas-tab">
+            <div class="tab-pane fade" id="nav-citas" role="tabpanel" aria-labelledby="nav-citas-tab" ##visbilidad##>
                 <ul>
+                    ##filaCita##
                     <li>
                         <div class="card ms-5 me-5 mt-4 mb-4 p-3 tarjeta_contenido" >
                             <div class="row g-0">
                                 <div class="col-md">
                                     <div class="card-body">
-                                        <h5 class="card-title fw-bold fs-4">Nombre servicio</h5>
+                                        <h5 class="card-title fw-bold fs-4">##nombreServicio##</h5>
                                         <div class="container">
                                             <div class="row">
-                                                <div class="col-lg-3 col-md-6 col-sm-12 mt-2">
+                                                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
                                                     <p class="card-text fw-bold">Nombre cliente:</p>
-                                                    <p class="card-text ms-3">Xabier Claver</p>
+                                                    <p class="card-text ms-3">##nombreCliente##</p>
                                                 </div>
-                                                <div class="col-lg-3 col-md-6 col-sm-12 mt-2">
+                                                <div class="col-lg-3 col-md-6 col-sm-12 mt-3">
                                                     <p class="card-text fw-bold">Email cliente:</p>
-                                                    <p class="card-text ms-3">xabierclaver@gmail.com</p>
+                                                    <p class="card-text ms-3">##emailCliente##</p>
                                                 </div>
-                                                <div class="col-lg-2 col-md-6 col-sm-12 mt-2">
+                                                <div class="col-lg-2 col-md-6 col-sm-12 mt-3">
                                                     <p class="card-text fw-bold">Día:</p>
-                                                    <p class="card-text ms-3">Lunes</p>
+                                                    <p class="card-text ms-3">##dia##</p>
                                                 </div>
-                                                <div class="col-lg-2 col-md-6 col-sm-12 mt-2">
+                                                <div class="col-lg-2 col-md-6 col-sm-12 mt-3">
                                                     <p class="card-text fw-bold">Hora inicio:</p>
-                                                    <p class="card-text ms-3">12:00</p>
+                                                    <p class="card-text ms-3">##horaInicio##</p>
                                                 </div>
-                                                <div class="col-lg-2 col-md-6 col-sm-12 mt-2">
+                                                <div class="col-lg-2 col-md-6 col-sm-12 mt-3">
                                                     <p class="card-text fw-bold">Hora fin:</p>
-                                                    <p class="card-text ms-3">18:00</p>
+                                                    <p class="card-text ms-3">##horaFin##</p>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12 mt-3">
+                                                    <p class="card-text fw-bold">Localización:</p>
+                                                    <p class="card-text ms-3">##localizacion##</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-danger p-2 mt-4 fw-bold float-end" id="cancelar_cita">Cancelar cita</button>
+                                        <a type="button" class="btn btn-danger p-2 mt-4 fw-bold float-end" id="cancelar_cita" href="../controller/Controller.php?accion=cancelarCita&idUsuario=##idUsuario##&idCita=##idCita##">Cancelar cita</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </li>
+                    ##filaCita##
                 </ul>
             </div>
         </div>

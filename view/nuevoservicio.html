@@ -33,42 +33,10 @@
   </style>
 </head>
 <body>
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="./home.html">
-        <img src="../imagenes/comunidad-color.png" alt="" width="34" height="34" class="d-inline-block align-text-top">
-        ServiceApp
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="./home.html">Inicio</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Categoría
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Cuidado de niños</a></li>
-              <li><a class="dropdown-item" href="#">Cuidado de personas dependientes</a></li>
-              <li><a class="dropdown-item" href="#">Cuidado de Mascotas</a></li>
-            </ul>
-          </li>
-        </ul>
-        <div class="d-flex">
-          <a class="nav-link" href="./register.html">Registrarse</a>
-          <a href="./login.html" class="btn login">Iniciar Sesión</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-</header>
+##header##
 <div class="container-fluid my-5 justify-content-md-center w-75 pt-4 pb-5 formNuevoServicio border border-5">
-  <form class="row g-3 was-validated">
+  <form class="row g-3 was-validated" action="../controller/Controller.php" method="post">
+    <input type="text" name="accion" value="nuevoServicio" hidden>
     <div class="row justify-content-md-center mt-3">
       <div class="col-md-4">
         <h1>Nuevo Servicio</h1>
@@ -76,36 +44,36 @@
     </div>
     <div class="col-md-4">
       <label for="fNombreServicio" class="form-label">Nombre del servicio</label>
-      <input type="text" class="form-control" id="fNombreServicio" required>
+      <input name="nombreServicio" type="text" class="form-control" id="fNombreServicio" required>
       <div class="valid-feedback">Válido.</div>
       <div class="invalid-feedback">Por favor escriba un nombre.</div>
     </div>
     <div class="col-md-5">
       <label for="fCategoria" class="form-label">Categoría</label>
-      <select id="fCategoria" class="form-select" required>
+      <select name="categoriaServicio" id="fCategoria" class="form-select" required>
         <option selected disabled value="">Elige...</option>
-        <option value="ninos">Cuidado de niños</option>
-        <option value="dependientes">Cuidado de personas dependientes</option>
-        <option value="mascotas">Cuidado de Mascotas</option>
+        ##filaCategoriaPag##
+        <option value=##categoriaId##>##nombreCategoria##</option>
+        ##filaCategoriaPag##
       </select>
       <div class="valid-feedback">Válido.</div>
       <div class="invalid-feedback">Por favor elija una categoría.</div>
     </div>
     <div class="col-md-3">
       <label for="fPrecio" class="form-label">Precio</label>
-      <input type="number" step="any" class="form-control" id="fPrecio" required>
+      <input name="precioServicio" type="number" step="any" class="form-control" id="fPrecio" required>
       <div class="valid-feedback">Válido.</div>
       <div class="invalid-feedback">Por favor escriba un precio por hora(En euros).</div>
     </div>
     <div class="col-12">
       <label for="fDescripcion" class="form-label">Descripción</label>
-      <textarea class="form-control" id="fDescripcion" rows="5" required></textarea>
+      <textarea name="descripcionServicio" class="form-control" id="fDescripcion" rows="5" required></textarea>
       <div class="valid-feedback">Válido.</div>
       <div class="invalid-feedback">Por favor escriba una descripción.</div>
     </div>
     <div class="row justify-content-md-center mt-3">
       <div class="col-sm-12 col-lg-3">
-        <button type="button" class="btn btn-dark btn-lg" id="botonAnadirServicio" style="padding-left: 2.5rem; padding-right: 2.5rem;">Añadir Servicio</button>
+        <input type="submit" class="btn btn-dark btn-lg" id="botonAnadirServicio" style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Añadir Servicio"/>
       </div>
     </div>
   </form>

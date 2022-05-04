@@ -30,43 +30,7 @@
     </style>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../controller/Controller.php?accion=home">
-                <img src="../imagenes/##imagenLogo##" alt="" width="34" height="34" class="d-inline-block align-text-top">
-                ##tituloWeb##
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="../controller/Controller.php?accion=home">Inicio</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categoría
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            ##filaCategoriaNav##
-                            <li><a class="dropdown-item" href="../controller/Controller.php?accion=abrirCategoria&id=##categoriaId##">##nombreCategoria##</a></li>
-                            ##filaCategoriaNav##
-                        </ul>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="nav-link" href="../view/register.html">Registrarse</a>
-                    <a href="../view/login.html" class="btn login">Iniciar Sesión</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<!-- Para hacerlo dinámico, copiar cada div id card y cambiar el id collapsedX y el href-->
-<!-- Otra cosa que se puede cambiar es el collapse show, show es para mostrarlo nada mas abrir -->
+##header##
 <div class="container mt-3 mb-5">
     <div class="alert alert-##tipoAlerta## alert-dismissible" role="alert" ##visibilidad##>
         ##mensajeNotificacion##

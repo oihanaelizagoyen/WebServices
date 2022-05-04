@@ -28,8 +28,14 @@
             text-transform: uppercase;
         }
 
-        .dropdown-menu, #informacion_reserva {
+        .dropdown-menu, #informacion_reserva, #carga {
             background-color: #b8f2e6;
+        }
+
+        #carga{
+            border: 0px;
+            color: #ffa69e;
+            display: none
         }
 
         #informacion_reserva{
@@ -43,62 +49,32 @@
         .navbar, .footer, table {
             background-color: #aed9e0;
         }
+
+        #nombre_usuario {
+            color: black;
+        }
+
+        #etiqueta_poblacion, #etiqueta_provincia {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="./home.html">
-                <img src="../imagenes/comunidad-color.png" alt="" width="34" height="34" class="d-inline-block align-text-top">
-                ServiceApp
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./home.html">Inicio</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Categoría
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Cuidado de niños</a></li>
-                            <li><a class="dropdown-item" href="#">Cuidado de personas dependientes</a></li>
-                            <li><a class="dropdown-item" href="#">Cuidado de Mascotas</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="nav-link" href="./register.html">Registrarse</a>
-                    <a href="./login.html" class="btn login">Iniciar Sesión</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-<!-- Para hacerlo dinámico, copiar cada div id card y cambiar el id collapsedX y el href-->
-<!-- Otra cosa que se puede cambiar es el collapse show, show es para mostrarlo nada mas abrir -->
+##header##
 <div class="container mt-3 mb-5">
+    <div id="notificacion"></div>
+    <div class="alert alert-##tipoAlerta## alert-dismissible" role="alert" ##visibilidad##>
+        ##mensajeNotificacion##
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="row m-md-5">
-        <h2 class="text-center">Nombre servicio</h2>
+        <h2 class="text-center">##nombreServicio##</h2>
         <h3 class="fs-5">Fecha: </h3>
-        <p class="ms-5">22/04/2022</p>
+        <p class="ms-5">##fechaServicio##</p>
         <h3 class="fs-5">Nombre usuario: </h3>
-        <p class="ms-5">Xabier Claver Zabala</p>
+        <a class="ms-5" id="nombre_usuario" href="../controller/Controller.php?accion=abrirPerfil&id=##idUsuarioServicio##">##usuarioServicio##</a>
         <h3 class="fs-5">Descripción: </h3>
-        <p class="ms-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean rhoncus, dolor eget bibendum
-            tempus, dui elit varius mi, id vestibulum libero enim ut lectus. Aenean sodales lectus dolor, quis
-            venenatis urna dignissim ut. Phasellus facilisis eu tortor sed sollicitudin. Sed faucibus ante sed mi
-            aliquam efficitur vel in lectus. Ut id sollicitudin libero. In cursus, sapien ut venenatis dapibus, mi
-            magna convallis lacus, quis egestas nunc justo eu nulla. Maecenas lobortis mollis pretium. Cras faucibus
-            interdum quam et dignissim. In hac habitasse platea dictumst. Donec quis feugiat orci. Sed rutrum lectus
-            a sapien pharetra ullamcorper. Aliquam erat volutpat.</p>
+        <p class="ms-5">##descripcionServicio##</p>
         <br>
         <h3 class="fs-5">Disponibilidad: </h3>
         <div class="table-responsive-sm ms-5">
@@ -111,46 +87,32 @@
                 </tr>
                 </thead>
                 <tbody>
+                ##filaDispoibilidad##
                 <tr>
-                    <th scope="row">Lunes</th>
-                    <td>12:00</td>
-                    <td>19:00</td>
+                    <th scope="row">##dia##</th>
+                    <td>##horaInicial##</td>
+                    <td>##horaFinal##</td>
                 </tr>
-                <tr>
-                    <th scope="row">Martes</th>
-                    <td>12:00</td>
-                    <td>19:00</td>
-                </tr>
-                <tr>
-                    <th scope="row">Miércoles</th>
-                    <td>12:00</td>
-                    <td>19:00</td>
-                </tr>
-                <tr>
-                    <th scope="row">Jueves</th>
-                    <td>12:00</td>
-                    <td>19:00</td>
-                </tr>
-                <tr>
-                    <th scope="row">Viernes</th>
-                    <td>14:00</td>
-                    <td>16:00</td>
-                </tr>
+                ##filaDispoibilidad##
                 </tbody>
             </table>
         </div>
         <h3 class="fs-5">Localización: </h3>
-        <p class="ms-5">Pamplona, Navarra</p>
+        <p class="ms-5">##localizacionServicio##</p>
         <br>
         <h3 class="fs-5">Vehículo propio: </h3>
-        <p class="ms-5">Sí</p>
+        <p class="ms-5">##vehiculoPropio##</p>
         <h3 class="fs-5">Precio: </h3>
-        <p class="ms-5">10$/hora</p>
+        <p class="ms-5">##precioServicio## €/hora</p>
     </div>
     <div class="row mt-5">
         <div id="informacion_reserva">
             <h3 class="text-center text-decoration-underline mt-2 mb-4 fs-5">Información de la reserva</h3>
-            <form class="row g-3 needs-validation was-validated" method="post" action="#">
+            <form class="row g-3 needs-validation was-validated" action="../controller/Controller.php" id="formuReserva"  method="post">
+                <input type="text" name="accion" value="realizarReserva" hidden>
+                <input type="text" name="idUsuario" value = "##idUsuarioServicio##" hidden>
+                <input type="text" name="idServicio" value = "##idServicio##" hidden>
+                <input type="text" name="idEmpresa" value="##idEmpresa##" hidden>
                 <div class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
                     <label class="fw-bold" for="nombre_apellidos">Nombre y apellidos:</label>
                     <input class="form-control" type="text" id="nombre_apellidos" name="nombre_apellidos" required>
@@ -181,26 +143,68 @@
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
                     <label class="fw-bold" for="hora_inicio">Hora de comienzo:</label>
-                    <select class="form-select" id="hora_inicio" name="hora_inicio" required>
+                    <select class="form-select horas" id="hora_inicio" name="hora_inicio" required>
                         <option selected disabled value="">Seleccione...</option>
-                        <option value="1">1</option>
                     </select>
                     <div class="invalid-feedback">
-                        Indique una hora de inicio válida.
+                        Indique una hora de comienzo válida.
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
                     <label class="fw-bold" for="hora_fin">Hora de fin:</label>
-                    <select class="form-select" id="hora_fin" name="hora_fin" required>
+                    <select class="form-select horas" id="hora_fin" name="hora_fin" required>
                         <option selected disabled value="">Seleccione...</option>
-                        <option value="1">1</option>
                     </select>
                     <div class="invalid-feedback">
                         Indique una hora de fin válida.
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
+                    <label class="fw-bold form-label" for="comunidad_autonoma">Comunidad Autónoma:</label>
+                    <select onchange="cargarprovincias();" class="form-select" id="comunidad_autonoma" name="comunidad_autonoma" required>
+                        ##filaComunidadAutonoma##
+                        <option value=##id_comunidad_autonoma## ##selected##>##comunidad_autonoma##</option>
+                        ##filaComunidadAutonoma##
+                    </select>
+                    <div class="invalid-feedback">
+                        Indique una Comunidad Autónoma válida.
+                    </div>
+                </div>
+                <div id="capaProvincias" class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
+                    <label id="etiqueta_provincia" class="fw-bold form-label" for="provincia">Provincia:</label>
+                    <select onchange="cargarpoblaciones();" class="form-select" id="provincia" name="provincia" required>
+                        ##filaProvincia##
+                        <option value=##id_provincia## ##selected##>##provincia##</option>
+                        ##filaProvincia##
+                    </select>
+                    <div class="invalid-feedback">
+                        Indique una Provincia válida.
+                    </div>
+                </div>
+                <div id="capaPoblaciones" class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
+                    <label id="etiqueta_poblacion" class="fw-bold form-label" for="poblacion">Poblacion:</label>
+                    <select class="form-select" id="poblacion" name="poblacion" required>
+                        ##filaPoblacion##
+                        <option value=##id_poblacion## ##selected##>##poblacion##</option>
+                        ##filaPoblacion##
+                    </select>
+                    <div class="invalid-feedback">
+                        Indique una Poblacion válida.
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-4 mt-3 mb-3">
+                    <label class="fw-bold" for="calle_portal_piso">Calle, portal y piso:</label>
+                    <input class="form-control" type="text" id="calle_portal_piso" name="calle_portal_piso" value="##calle_portal_piso##" required>
+                    <div class="invalid-feedback">
+                        Rellene este campo correctamente.
+                    </div>
+                </div>
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary m-4 fw-bold" type="submit" id="reservar_cita">Reservar cita</button>
+                    <button id="carga" class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        <span class="visually-hidden">Loading...</span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -217,5 +221,76 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+    $( ".horas" ).append( "<option value='00:01:00.0000000'>00:01</option>\n" +
+        "    <option value='01:00:00.0000000'>01:00</option>\n" +
+        "    <option value='02:00:00.0000000'>02:00</option>\n" +
+        "    <option value='03:00:00.0000000'>03:00</option>\n" +
+        "    <option value='04:00:00.0000000'>04:00</option>\n" +
+        "    <option value='05:00:00.0000000'>05:00</option>\n" +
+        "    <option value='06:00:00.0000000'>06:00</option>\n" +
+        "    <option value='07:00:00.0000000'>07:00</option>\n" +
+        "    <option value='08:00:00.0000000'>08:00</option>\n" +
+        "    <option value='09:00:00.0000000'>09:00</option>\n" +
+        "    <option value='10:00:00.0000000'>10:00</option>\n" +
+        "    <option value='11:00:00.0000000'>11:00</option>\n" +
+        "    <option value='12:00:00.0000000'>12:00</option>\n" +
+        "    <option value='13:00:00.0000000'>13:00</option>\n" +
+        "    <option value='14:00:00.0000000'>14:00</option>\n" +
+        "    <option value='15:00:00.0000000'>15:00</option>\n" +
+        "    <option value='16:00:00.0000000'>16:00</option>\n" +
+        "    <option value='17:00:00.0000000'>17:00</option>\n" +
+        "    <option value='18:00:00.0000000'>18:00</option>\n" +
+        "    <option value='19:00:00.0000000'>19:00</option>\n" +
+        "    <option value='20:00:00.0000000'>20:00</option>\n" +
+        "    <option value='21:00:00.0000000'>21:00</option>\n" +
+        "    <option value='22:00:00.0000000'>22:00</option>\n" +
+        "    <option value='23:00:00.0000000'>23:00</option>\n" +
+        "    <option value='23:59:00.0000000'>23:59</option>" );
+
+    $("#formuReserva").on('submit', function (){
+        let inicio_arr = $('#hora_inicio').val().split(":");
+        let final_arr = $('#hora_fin').val().split(":");
+        let inicio = inicio_arr[0];
+        let final = final_arr[0];
+
+        if (inicio > final){
+            $( "#notificacion" ).append( "<div class=\"alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
+                "  La <strong>reserva</strong> no se puede terminar antes de empezar.\n" +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>");
+            window.location = "#notificacion";
+            return false;
+        }else{
+            document.getElementById("carga").style.display = "inline";
+            document.getElementById("botonRegistrar").disabled = true;
+            return true;
+        }
+    });
+
+    function cargarprovincias(){
+        var valor = $("#comunidad_autonoma option:selected" ).val();
+        $.ajax({
+            type: "GET",
+            url: "../controller/Controller.php?accion=obtenerProvincias&id=" + valor,
+            success: function (response) {
+                $("#capaProvincias").html(response);
+                cargarpoblaciones();
+            }
+        });
+    }
+
+    function cargarpoblaciones(){
+        var valor = $("#provincia option:selected" ).val();
+        $.ajax({
+            type: "GET",
+            url: "../controller/Controller.php?accion=obtenerPoblaciones&id=" + valor,
+            success: function (response) {
+                $("#capaPoblaciones").html(response);
+            }
+        });
+    }
+</script>
 </body>
 </html>
