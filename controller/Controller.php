@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', error_reporting(E_ALL));
 session_start();
 
+
 include __DIR__ . "/../model/Model.php";
 include __DIR__ . "/../view/View.php";
 $logedin = false;
