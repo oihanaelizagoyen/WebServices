@@ -133,9 +133,9 @@ switch ($accion) {
         if (isset($_POST['idServicio'])) {
             $id_servicio = $_POST['idServicio'];
             if ($logedin == true) {
-                vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosServicioArray($id_servicio), validarReserva(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+                vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosServicioArray($id_servicio), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), validarReserva());
             } else {
-                vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosServicioArray($id_servicio), validarReserva(), null);
+                vMostrarServicio($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosServicioArray($id_servicio), null, validarReserva());
             }
         } else {
             if ($logedin == true) {
@@ -178,9 +178,9 @@ switch ($accion) {
         if (isset($_GET['idUsuario'])) {
             $id_usuario = $_GET['idUsuario'];
             if ($logedin == true) {
-                vMostrarPerfil(obtenerDatosPagina(), obtenerCategorias(), obtenerDatosPerfilArray($id_usuario), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), validarCancelarCita());
+                vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosPerfilArray($id_usuario), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), validarCancelarCita());
             } else {
-                vMostrarPerfil(obtenerDatosPagina(), obtenerCategorias(), obtenerDatosPerfilArray($id_usuario), null, validarCancelarCita());
+                vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosPerfilArray($id_usuario), null, validarCancelarCita());
             }
         } else {
             if ($logedin == true) {
@@ -250,6 +250,7 @@ switch ($accion) {
         break;
     case 'registrar':
         if ($logedin == false) {
+            echo "hola";
             $empresa = crearEmpresaApi();
             if (isset($empresa['id'])) {
 

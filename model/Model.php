@@ -627,7 +627,7 @@ function crearEmpresaApi()
         isset($_POST['provincia']) &&
         isset($_POST['poblacion'])) {
 
-        $nombre = $_POST['nombre'] . ", " . $_POST['apellidos'];
+        $nombre = $_POST['nombre'] . " " . $_POST['apellidos'];
         $direccion = $_POST['direccion'];
         $cAutonoma_id = $_POST['cAutonoma'];
         $provincia_id = $_POST['provincia'];
