@@ -39,9 +39,9 @@ function obtenerServiciosCategoriaDb($id_categoria, $criterioOrdenacion)
 function obtenerDatosEmpleadoDb($id_usuario)
 {
     $conn = DatabaseConnSingleton::getConn();
-    $consultaEmpleado = "select id, nombre, imagen_perfil from final_Usuario where id = \"" . $id_usuario . "\";";
-    $resultadoServicios = $conn->query($consultaEmpleado);
-    return $resultadoServicios;
+    $consultaEmpleado = "select id, nombre, imagen_perfil, id_empresa from final_Usuario where id = \"" . $id_usuario . "\";";
+    $resultadoEmpleado = $conn->query($consultaEmpleado);
+    return $resultadoEmpleado;
 }
 
 function crearEmpleadoDb($id_empleado, $id_empresa)
@@ -518,18 +518,22 @@ function obtenerEmpresaPorIdApi($id_empresa)
 function obtenerDatosParaEditarPerfil($id_usuario)
 {
     $datos = array();
-    $datosempleado = obtenerEmpleado($id_usuario);
-    if ($datosempleado == "error_obtener_empresa") { //Pos cero empleado
-        return "error_empleado";
-    }
-    $datos[] = $datosempleado->fetch_assoc();
+    $datosempleado = obtenerUsuarioDb($id_usuario);
+    $datos[] = $datosempleado->fetch_assoc(); //Pos 0 ususariodb
 
-    $datosempresa = obtenerEmpresaPorIdApi($datos[1]['id_empresa']); //Pos 2 empresa
+    $datosempleado = obtenerUsuarioApi($datos[0]['id_empresa'], $datos[0]['id']); //Pos 1 usuarioapi
+    if (!isset($datosempleado['id'])){
+        return "error_api";
+    }
+    $datos[] = $datosempleado;
+
+    $datosempresa = obtenerEmpresaPorIdApi($datos[0]['id_empresa']); //Pos 2 empresaapi
     if ($datosempresa == "error_obtener_empresa") {
-        return "error_empresa";
+        return "error_api";
     }
     $datos[] = $datosempresa;
 
+    return $datos;
 }
 
 
@@ -716,7 +720,319 @@ function crearEmpresaApi()
     } else {
         return "error_datos";
     }
+}
 
+function editarUsuario($id_empleado){
+    $empleado_ = obtenerDatosEmpleadoDb($id_empleado);
+    $empleado = $empleado_->fetch_assoc();
+
+    $emplado_actualizado_api = actualizarEmpleadoApi($empleado['id_empresa'], $id_empleado);
+    if($emplado_actualizado_api == "error_datos"){
+        return "error_api";
+    }
+
+    $empresa_actualizada_api = actualizarEmpresaApi($empleado['id_empresa']);
+    if($empresa_actualizada_api == "error_datos"){
+        return "error_api";
+    }
+
+    $emplado_actualizado_db = actualizarEmpleadoDb($id_empleado);
+    if($emplado_actualizado_db == "error_datos"){
+        return "error_base";
+    } elseif ($emplado_actualizado_db == "error_imagen"){
+        return "error_imagen_base";
+    }
+    return "ok";
+
+}
+
+function actualizarEmpleadoDb($id_empleado)
+{
+    if (isset($_POST['experiencia'])) {
+        $vehiculo = 0;
+        $experiencia = $_POST['experiencia'];
+
+        if (isset($_POST['vehiculo'])) {
+            if ($_POST['vehiculo'] == 'on') {
+                $vehiculo = 1;
+            }
+        } else {
+            $vehiculo = 0;
+        }
+
+        if ($tipo = $_FILES['imgPerfil']['size'] == 0 && $_FILES['imgPerfil']['error'] == 0){
+            $conn = DatabaseConnSingleton::getConn();
+            if ($conn->query("UPDATE final_Usuario SET vehiculo_propio='". $vehiculo ."', experiencia='". $experiencia ."' WHERE id='". $id_empleado ."'") == TRUE) {
+                return "ok";
+            } else {
+                DatabaseConnSingleton::closeConn();
+                return "error_datos";
+            }
+        }
+
+        $tipo = $_FILES['imgPerfil']['type'];
+
+        if ($tipo == "image/jpg") {
+            $nombrefichero = time() . "-" . uniqid() . ".jpg";
+        } elseif ($tipo = "image/jpeg") {
+            $nombrefichero = time() . "-" . uniqid() . ".jpeg";
+        } elseif ($tipo = "image/png") {
+            $nombrefichero = time() . "-" . uniqid() . ".png";
+        } elseif ($tipo = "image/gif") {
+            $nombrefichero = time() . "-" . uniqid() . ".gif";
+        } else {
+            return "error_imagen";
+        }
+
+        $temporal = $_FILES['imgPerfil']['tmp_name'];
+
+        if ($temporal == ""){
+            $conn = DatabaseConnSingleton::getConn();
+            if ($conn->query("UPDATE final_Usuario SET vehiculo_propio='". $vehiculo ."', experiencia='". $experiencia ."' WHERE id='". $id_empleado ."'") == TRUE) {
+                return "ok";
+            } else {
+                DatabaseConnSingleton::closeConn();
+                return "error_datos";
+            }
+        }
+
+        if (!move_uploaded_file($temporal, '../imagenes/fotosperfil/' . $nombrefichero)) {
+            return "error_imagen";
+        }
+        $conn = DatabaseConnSingleton::getConn();
+        if ($conn->query("UPDATE final_Usuario SET vehiculo_propio='". $vehiculo ."', experiencia='". $experiencia . "', imagen_perfil='". $nombrefichero . "' WHERE id='". $id_empleado ."'") == TRUE) {
+            return "ok";
+        } else {
+            DatabaseConnSingleton::closeConn();
+            return "error_datos";
+        }
+    } else {
+        return "error_datos";
+    }
+}
+
+function actualizarEmpresaApi($id_empresa)
+{
+    if (isset($_POST['direccion']) &&
+        isset($_POST['cAutonoma']) &&
+        isset($_POST['provincia']) &&
+        isset($_POST['poblacion'])) {
+
+        $direccion = $_POST['direccion'];
+        $cAutonoma_id = $_POST['cAutonoma'];
+        $provincia_id = $_POST['provincia'];
+        $municipio_id = $_POST['poblacion'];
+
+        $cAutonoma = obtenerNombreComunidadAutonomaPorId($cAutonoma_id);
+        $provincia = obtenerNombreProvinciaPorId($provincia_id);
+        $municipio = obtenerNombrePoblacionPorId($municipio_id);
+
+        $address = array(
+            "city" => $municipio,
+            "countryOrRegion" => $cAutonoma,
+            "state" => $provincia,
+            "street" => $direccion
+        );
+
+        $datos_empresa = array(
+            "address" => $address,
+        );
+
+        $curl = new Curl();
+        $respuesta = $curl->patchGenerate('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/' .$id_empresa, $datos_empresa);
+        return $respuesta;
+    } else {
+        return "error_datos";
+    }
+}
+
+function actualizarEmpleadoApi($id_empresa, $id_empleado)
+{
+    if (isset($_POST['lunesIni']) &&
+        isset($_POST['lunesFin']) &&
+        isset($_POST['martesIni']) &&
+        isset($_POST['martesFin']) &&
+        isset($_POST['miercolesIni']) &&
+        isset($_POST['miercolesFin']) &&
+        isset($_POST['juevesIni']) &&
+        isset($_POST['juevesFin']) &&
+        isset($_POST['viernesIni']) &&
+        isset($_POST['viernesFin']) &&
+        isset($_POST['sabadoIni']) &&
+        isset($_POST['sabadoFin']) &&
+        isset($_POST['domingoIni']) &&
+        isset($_POST['domingoFin'])) {
+
+        $lunesIni = $_POST['lunesIni'];
+        $lunesFin = $_POST['lunesFin'];
+        $martesIni = $_POST['martesIni'];
+        $martesFin = $_POST['martesFin'];
+        $miercolesIni = $_POST['miercolesIni'];
+        $miercolesFin = $_POST['miercolesFin'];
+        $juevesIni = $_POST['juevesIni'];
+        $juevesFin = $_POST['juevesFin'];
+        $viernesIni = $_POST['viernesIni'];
+        $viernesFin = $_POST['viernesFin'];
+        $sabadoIni = $_POST['sabadoIni'];
+        $sabadoFin = $_POST['sabadoFin'];
+        $domingoIni = $_POST['domingoIni'];
+        $domingoFin = $_POST['domingoFin'];
+        //Datos para crear usuario
+        $workingHours = array();
+
+        $ini_horas = explode(":", $lunesIni);
+        $fin_horas = explode(":", $lunesFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $lunesIni,
+                "endTime" => $lunesFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursMonday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "monday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursMonday;
+        }
+
+        $ini_horas = explode(":", $martesIni);
+        $fin_horas = explode(":", $martesFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $martesIni,
+                "endTime" => $martesFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursTuesday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "tuesday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursTuesday;
+        }
+
+        $ini_horas = explode(":", $miercolesIni);
+        $fin_horas = explode(":", $miercolesFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $miercolesIni,
+                "endTime" => $miercolesFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursWednesday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "wednesday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursWednesday;
+        }
+
+        $ini_horas = explode(":", $juevesIni);
+        $fin_horas = explode(":", $juevesFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $juevesIni,
+                "endTime" => $juevesFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursThursday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "thursday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursThursday;
+        }
+
+        $ini_horas = explode(":", $viernesIni);
+        $fin_horas = explode(":", $viernesFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $viernesIni,
+                "endTime" => $viernesFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursFriday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "friday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursFriday;
+        }
+
+        $ini_horas = explode(":", $sabadoIni);
+        $fin_horas = explode(":", $sabadoFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $sabadoIni,
+                "endTime" => $sabadoFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursSaturday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "saturday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursSaturday;
+        }
+
+        $ini_horas = explode(":", $domingoIni);
+        $fin_horas = explode(":", $domingoFin);
+        $int_ini_hora = (int)$ini_horas[0];
+        $int_fin_hora = (int)$fin_horas[0];
+        if (($int_ini_hora - $int_fin_hora) != 0) {
+            $TimeSlots_ = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
+                "startTime" => $domingoIni,
+                "endTime" => $domingoFin);
+            $TimeSlots = array($TimeSlots_);
+            $businessHoursSunday = array(
+                "@odata.type" => "#microsoft.graph.bookingWorkHours",
+                "day@odata.type" => "#microsoft.graph.dayOfWeek",
+                "day" => "sunday",
+                "timeSlots@odata.type" => "#Collection(microsoft.graph.bookingWorkTimeSlot)",
+                "timeSlots" => $TimeSlots
+            );
+            $workingHours[] = $businessHoursSunday;
+        }
+
+        $datos_empleado = array(
+            "@odata.type" => "#microsoft.graph.bookingStaffMember",
+            "workingHours" => $workingHours
+        );
+
+        $curl = new Curl();
+        $respuesta = $curl->patchGenerate('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/' . $id_empresa . '/staffmembers/'. $id_empleado, $datos_empleado);
+        //var_dump($respuesta);
+        return $respuesta;
+
+    } else {
+        return "error_datos";
+    }
 }
 
 function crearEmpleadoApi($id_empresa)

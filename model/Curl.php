@@ -28,6 +28,15 @@ class Curl
             ->setHTTPHeader()
             ->obtainResponse();
     }
+    public function patchGenerate($url, array $data){
+        return $this->init()
+            ->setURL($url)
+            ->setCustomRequest("PATCH")
+            ->setPostFields($data)
+            ->setReturnTransfer()
+            ->setHTTPHeader()
+            ->obtainResponse();
+    }
 
     private function init()
     {

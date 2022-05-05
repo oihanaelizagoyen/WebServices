@@ -76,7 +76,19 @@ function vMostrarHome($sesion, $datosPagina, $categorias, $empleado = null, $err
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la conexión con Microsoft 365, no se han podido obtener los datos para mostrar el perfil indicado, verificar token", $trozos2[0]);
-    } elseif (($errores == "error_generico")) {
+    } elseif($errores == "error_api"){
+        $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
+        $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+        $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la conexión con Microsoft 365, no se han podido obtener los datos, verificar token", $trozos2[0]);
+    } elseif($errores == "error_base"){
+        $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
+        $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+        $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la conexión de la base de datos, no se han podido obtener los datos para actualizar", $trozos2[0]);
+    }elseif($errores == "error_imagen_base"){
+        $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
+        $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+        $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la imagen de perfil, ha tratado de insertar un formato no permitido", $trozos2[0]);
+    }  elseif (($errores == "error_generico")) {
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Ha ocurrido un error", $trozos2[0]);
@@ -316,7 +328,7 @@ function vMostrarServicio($sesion, $datosPagina, $categorias, $arrayDatosServici
     $trozos3[0] = str_replace("##idUsuarioServicio##", $usuarioDb['id'], $trozos3[0]);
     $trozos3[0] = str_replace("##idServicio##", $servicioDb['id'], $trozos3[0]);
     $trozos3[0] = str_replace("##idEmpresa##", $usuarioDb['id_empresa'], $trozos3[0]);
-
+    //TODO copiar de aquí
     $trozoComunidadesAutonomas = "";
     $idComunidadAutonoma = "";
     while ($datosComunidadAutonoma = $comunidadesAutonomas->fetch_assoc()) {
@@ -519,7 +531,7 @@ function vMostrarPerfil($autentificado, $datosPagina, $categorias, $arrayDatosPe
     }
     $trozos3[0] = str_replace("##idUsuario##", $usuarioDb['id'], $trozos3[0]);
 
-    if ($autentificado /*&& ($_SESSION["id_usuario"] == $usuarioDb['id'])*/) {
+    if ($autentificado && ($_SESSION["id_usuario"] == $usuarioDb['id'])) {
         $trozos3[0] = str_replace("##visbilidad##", "", $trozos3[0]);
     } else {
         $trozos3[0] = str_replace("##visbilidad##", "hidden", $trozos3[0]);
@@ -539,14 +551,14 @@ function vMostrarPerfil($autentificado, $datosPagina, $categorias, $arrayDatosPe
         $servicios .= $aux;
     }
 
-    if ($autentificado /*&& ($_SESSION["id_usuario"] == $usuarioDb['id'])*/) {
+    if ($autentificado && ($_SESSION["id_usuario"] == $usuarioDb['id'])) {
         $trozos4[0] = str_replace("##visbilidad##", "", $trozos4[0]);
     } else {
         $trozos4[0] = str_replace("##visbilidad##", "hidden", $trozos4[0]);
     }
 
     $citas = "";
-    if ($autentificado /*&& ($_SESSION["id_usuario"] == $usuarioDb['id'])*/) {
+    if ($autentificado && ($_SESSION["id_usuario"] == $usuarioDb['id'])) {
         for ($numCita = 0; $numCita < count($citasApi); $numCita++) {
 
             $aux = $trozos4[1];
@@ -672,5 +684,182 @@ function vMostrarNuevoServicio($datosPagina, $categorias, $empleado = null)
 
     echo $trozos1[0] . $categorias_navegador . $trozos2[0] . $categorias_pagina . $trozos2[2];
 
+}
+
+function vMostrarEditarPerfil($datosPagina, $categorias, $provincias, $comunidadesAutonomas, $poblaciones, $datosEditarPerfil){
+
+    //DatosPerfil 0 --> Empleado Base de datos
+    //DatosPerfil 1 --> Empleado Api
+    //DatosPerfil 2 --> Empresa Api
+
+    $cadena = file_get_contents(__DIR__ . "/editarPerfil.html");
+    $header = file_get_contents(__DIR__ . "/headerSession.html");
+
+    $cadena = str_replace("##header##", $header, $cadena);
+    $cadena = str_replace("##nombreUsuario##", $datosEditarPerfil[0]['nombre'], $cadena);
+    $cadena = str_replace("##imagenPerfil##", $datosEditarPerfil[0]['imagen_perfil'], $cadena);
+
+    $datosPagina_aux = $datosPagina->fetch_assoc();
+
+    $cadena = str_replace("##tituloWeb##", $datosPagina_aux['nombre'], $cadena);
+    $cadena = str_replace("##imagenLogo##", $datosPagina_aux['logo'], $cadena);
+
+    $cadena = str_replace("##valorDireccion##", $datosEditarPerfil[2]['address']['street'], $cadena);
+
+    $cadena = str_replace("##valueDescripcion##", $datosEditarPerfil[0]['experiencia'], $cadena);
+
+    if ($datosEditarPerfil[0]['vehiculo_propio'] == 1) {
+        $cadena = str_replace("##checked##", "checked", $cadena);
+    } else {
+        $cadena = str_replace("##checked##", "", $cadena);
+    }
+
+    $trozos1 = explode("##filaCategoriaNav##", $cadena);
+    $trozos2 = explode("##filaComunidadAutonoma##", $trozos1[2]);
+    $trozos3 = explode("##filaProvincia##", $trozos2[2]);
+    $trozos4 = explode("##filaPoblacion##", $trozos3[2]);
+
+    $categorias_navegador = "";
+    while ($datosCategoria = $categorias->fetch_assoc()) {
+        $aux = $trozos1[1];
+        $aux = str_replace("##nombreCategoria##", $datosCategoria['nombre'], $aux);
+        $aux = str_replace("##categoriaId##", $datosCategoria['id'], $aux);
+        $categorias_navegador .= $aux;
+    }
+
+    $trozoComunidadesAutonomas = "";
+    $idComunidadAutonoma = "";
+    while ($datosComunidadAutonoma = $comunidadesAutonomas->fetch_assoc()) {
+        $aux = $trozos2[1];
+        $aux = str_replace("##comunidad_autonoma##", $datosComunidadAutonoma['nombre'], $aux);
+        $aux = str_replace("##id_comunidad_autonoma##", $datosComunidadAutonoma['id'], $aux);
+        if ($datosComunidadAutonoma['nombre'] == $datosEditarPerfil[2]["address"]["countryOrRegion"]) {
+            $aux = str_replace("##selected##", "selected", $aux);
+            $idComunidadAutonoma = $datosComunidadAutonoma['id'];
+        } else {
+            $aux = str_replace("##selected##", "", $aux);
+        }
+        if ($idComunidadAutonoma == "") {
+            $idComunidadAutonoma = $datosComunidadAutonoma['id'];
+        }
+        $trozoComunidadesAutonomas .= $aux;
+    }
+
+    $trozoProvincias = "";
+    $idProvincia = "";
+    while ($datosProvincia = $provincias->fetch_assoc()) {
+        if ($datosProvincia['id_comunidad_autonoma'] == $idComunidadAutonoma) {
+            $aux = $trozos3[1];
+            $aux = str_replace("##provincia##", $datosProvincia['nombre'], $aux);
+            $aux = str_replace("##id_provincia##", $datosProvincia['id'], $aux);
+            if ($datosProvincia['nombre'] == $datosEditarPerfil[2]["address"]["state"]) {
+                $aux = str_replace("##selected##", "selected", $aux);
+                $idProvincia = $datosProvincia['id'];
+            } else {
+                $aux = str_replace("##selected##", "", $aux);
+            }
+            if ($idProvincia == "") {
+                $idProvincia = $datosProvincia['id'];
+            }
+            $trozoProvincias .= $aux;
+        }
+    }
+
+    $trozoPoblaciones = "";
+    while ($datosPoblacion = $poblaciones->fetch_assoc()) {
+        if ($datosPoblacion['id_provincia'] == $idProvincia) {
+            $aux = $trozos4[1];
+            $aux = str_replace("##poblacion##", $datosPoblacion['nombre'], $aux);
+            $aux = str_replace("##id_poblacion##", $datosPoblacion['id'], $aux);
+            if ($datosPoblacion['nombre'] == $datosEditarPerfil[2]["address"]["city"]) {
+                $aux = str_replace("##selected##", "selected", $aux);
+            } else {
+                $aux = str_replace("##selected##", "", $aux);
+            }
+            $trozoPoblaciones .= $aux;
+        }
+    }
+    $cadena = $trozos1[0] . $categorias_navegador . $trozos2[0] . $trozoComunidadesAutonomas . $trozos3[0] . $trozoProvincias . $trozos4[0] . $trozoPoblaciones . $trozos4[2];
+
+    //Completamos los dias con los datos del api
+    $opciones = file_get_contents(__DIR__ . "/opcionesHoras.html");
+
+    $lista_values = array('00:01:00.0000000','01:00:00.0000000','02:00:00.0000000','03:00:00.0000000','04:00:00.0000000','05:00:00.0000000','06:00:00.0000000','07:00:00.0000000','08:00:00.0000000','09:00:00.0000000','10:00:00.0000000','11:00:00.0000000','12:00:00.0000000','13:00:00.0000000','14:00:00.0000000','15:00:00.0000000','16:00:00.0000000','17:00:00.0000000','18:00:00.0000000','19:00:00.0000000','20:00:00.0000000','21:00:00.0000000','22:00:00.0000000','23:00:00.0000000', '23:59:00.0000000');
+    $lista_horas = array('00:01','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00', '23:59');
+    $dias = array("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo");
+    $dias_rellenados = array();
+    $startoend = array('startTime', 'endTime');
+    $iniofin = array('Ini', 'Fin');
+
+    for($iniofin_value = 0; $iniofin_value < count($iniofin); $iniofin_value++){
+        for ($numHorario = 0; $numHorario < count($datosEditarPerfil[1]["workingHours"]); $numHorario++) {
+            $dia = "";
+            switch ($datosEditarPerfil[1]["workingHours"][$numHorario]["day"]) {
+                case "monday":
+                    $dia = $dias[0];
+                    break;
+                case "tuesday":
+                    $dia = $dias[1];
+                    break;
+                case "wednesday":
+                    $dia = $dias[2];
+                    break;
+                case "thursday":
+                    $dia = $dias[3];
+                    break;
+                case "friday":
+                    $dia = $dias[4];
+                    break;
+                case "saturday":
+                    $dia = $dias[5];
+                    break;
+                case "sunday":
+                    $dia = $dias[6];
+            }
+            $listaopciones = "";
+            for($i = 0; $i < count($lista_values); $i++){
+                $aux = $opciones;
+                $aux = str_replace("##valuehora##", $lista_values[$i], $aux);
+                $aux = str_replace("##hora##", $lista_horas[$i], $aux);
+                if ($lista_values[$i] == $datosEditarPerfil[1]["workingHours"][$numHorario]["timeSlots"][0][$startoend[$iniofin_value]]){
+                    $aux = str_replace("##selected##", 'selected', $aux);
+                } else {
+                    $aux = str_replace("##selected##", '', $aux);
+                }
+                $listaopciones .= $aux;
+            }
+            $cadena = str_replace('##' . $dia . $iniofin[$iniofin_value] . '##', $listaopciones, $cadena);
+
+            if(!in_array($dia, $dias_rellenados)){
+                $dias_rellenados[] = $dia;
+            }
+        }
+    }
+
+    //Completamos los dias restantes
+    $dias_faltantes = array();
+    foreach($dias as $dia_){
+        if(!in_array($dia_, $dias_rellenados)){
+            $dias_faltantes[] = $dia_;
+        }
+    }
+
+    for($iniofin_value = 0; $iniofin_value < count($iniofin); $iniofin_value++){
+        for ($numHorario = 0; $numHorario < count($dias_faltantes); $numHorario++) {
+            $listaopciones = "";
+            for($i = 0; $i < count($lista_values); $i++){
+                $aux = $opciones;
+                $aux = str_replace("##valuehora##", $lista_values[$i], $aux);
+                $aux = str_replace("##hora##", $lista_horas[$i], $aux);
+                $aux = str_replace("##selected##", '', $aux);
+                $listaopciones .= $aux;
+            }
+            $cadena = str_replace('##' . $dias_faltantes[$numHorario] . $iniofin[$iniofin_value] . '##', $listaopciones, $cadena);
+        }
+    }
+
+    $cadena = str_replace("##fotoperfil##", $datosEditarPerfil[0]['imagen_perfil'], $cadena);
+
+    echo $cadena;
 }
 

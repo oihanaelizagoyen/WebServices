@@ -39,20 +39,19 @@
     <form class="row g-3 was-validated" action="../controller/Controller.php" id="formuRegistro" method="post" enctype="multipart/form-data">
         <input type="text" name="accion" value="editarPerfil" hidden>
         <div class="row justify-content-md-center mt-3">
-            <div class="col-md-3">
+            <div class="col-lg-3">
                 <h1>Editar Perfil</h1>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-lg-3 col-md-6 col-sm-12">
             <label for="fDireccion" class="form-label">Dirección (Calle, portal y piso)</label>
-            <input name="direccion" type="text" class="form-control" id="fDireccion" placeholder="C/Ejemplo, nº11, 1ºdcha" required>
+            <input value="##valorDireccion##" name="direccion" type="text" class="form-control" id="fDireccion" placeholder="C/Ejemplo, nº11, 1ºdcha" required>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor, escriba una dirección.</div>
         </div>
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-6 col-sm-12">
             <label for="comunidad_autonoma" class="form-label">Comunidad Autónoma</label>
             <select onchange="cargarprovincias();" name="cAutonoma" id="comunidad_autonoma" class="form-select" required>
-                <option selected disabled value="">Elige...</option>
                 ##filaComunidadAutonoma##
                 <option value=##id_comunidad_autonoma## ##selected##>##comunidad_autonoma##</option>
                 ##filaComunidadAutonoma##
@@ -60,18 +59,22 @@
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Indique una Comunidad Autónoma válida.</div>
         </div>
-        <div id="capaProvincias" class="col-md-3">
+        <div id="capaProvincias" class=" col-lg-3 col-md-6 col-sm-12">
             <label for="provincia" class="form-label">Provincia</label>
             <select onchange="cargarpoblaciones();" name="provincia" id="provincia" class="form-select" required>
-                <option selected disabled value="">Elige...</option>
+                ##filaProvincia##
+                <option value=##id_provincia## ##selected##>##provincia##</option>
+                ##filaProvincia##
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Indique una Provincia válida.</div>
         </div>
-        <div id="capaPoblaciones" class="col-md-3">
+        <div id="capaPoblaciones" class=" col-lg-3 col-md-6 col-sm-12">
             <label for="poblacion" class="form-label">Municipio</label>
-            <select name="municipio" id="poblacion" class="form-select" required>
-                <option selected disabled value="">Elige...</option>
+            <select name="poblacion" id="poblacion" class="form-select" required>
+                ##filaPoblacion##
+                <option value=##id_poblacion## ##selected##>##poblacion##</option>
+                ##filaPoblacion##
             </select>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Indique una Poblacion válida.</div>
@@ -82,6 +85,10 @@
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor, añada una imagen para su perfil.</div>
         </div>
+        <div class="col-md-4">
+            <img src="../imagenes/fotosperfil/##fotoperfil##" class="rounded mx-auto " style="max-height: 110px" alt="foto perfil">
+        </div>
+
         <div class="col-md-7 col-sm-12">
             <label for="fDisp" class="form-label">Disponibilidad horaria (Mantener de 00:01 a 00:01 para indicar que no trabaja)</label>
             <table id="fDisp" class="table table-striped">
@@ -94,77 +101,91 @@
                     <tr>
                         <th scope="col">Lunes</th>
                         <td>
-                            <select name="lunesIni" id="fLunesIni" class="form-select horas">
+                            <select name="lunesIni" id="fLunesIni" class="form-select">
+                                ##lunesIni##
                             </select>
                         </td>
                         <td>
-                            <select name="lunesFin" id="fLunesFin" class="form-select horas">
+                            <select name="lunesFin" id="fLunesFin" class="form-select">
+                                ##lunesFin##
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Martes</th>
                         <td>
-                            <select name="martesIni" id="fMartesIni" class="form-select horas">
+                            <select name="martesIni" id="fMartesIni" class="form-select">
+                                ##martesIni##
                             </select>
                         </td>
                         <td>
-                            <select name="martesFin" id="fMartesFin" class="form-select horas">
+                            <select name="martesFin" id="fMartesFin" class="form-select">
+                                ##martesFin##
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Miércoles</th>
                         <td>
-                            <select name="miercolesIni" id="fMiercolesIni" class="form-select horas">
+                            <select name="miercolesIni" id="fMiercolesIni" class="form-select">
+                                ##miercolesIni##
                             </select>
                         </td>
                         <td>
-                            <select name="miercolesFin" id="fMiercolesFin" class="form-select horas">
+                            <select name="miercolesFin" id="fMiercolesFin" class="form-select">
+                                ##miercolesFin##
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Jueves</th>
                         <td>
-                            <select name="juevesIni" id="fJuevesIni" class="form-select horas">
+                            <select name="juevesIni" id="fJuevesIni" class="form-select">
+                                ##juevesIni##
                             </select>
                         </td>
                         <td>
-                            <select name="juevesFin" id="fJuevesFin" class="form-select horas">
+                            <select name="juevesFin" id="fJuevesFin" class="form-select">
+                                ##juevesFin##
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Viernes</th>
                         <td>
-                            <select name="viernesIni" id="fViernesIni" class="form-select horas">
+                            <select name="viernesIni" id="fViernesIni" class="form-select">
+                                ##viernesIni##
                             </select>
                         </td>
                         <td>
-                            <select name="viernesFin" id="fViernesFin" class="form-select horas">
+                            <select name="viernesFin" id="fViernesFin" class="form-select">
+                                ##viernesFin##
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Sábado</th>
                         <td>
-                            <select name="sabadoIni" id="fSabadoIni" class="form-select horas">
+                            <select name="sabadoIni" id="fSabadoIni" class="form-select">
+                                ##sabadoIni##
                             </select>
                         </td>
                         <td>
-                            <select name="sabadoFin" id="fSabadoFin" class="form-select horas">
+                            <select name="sabadoFin" id="fSabadoFin" class="form-select">
+                                ##sabadoFin##
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th scope="col">Domingo</th>
                         <td>
-                            <select name="domingoIni" id="fDomingoIni" class="form-select horas">
+                            <select name="domingoIni" id="fDomingoIni" class="form-select">
+                                ##domingoIni##
                             </select>
                         </td>
                         <td>
-                            <select name="domingoFin" id="fDomingoFin" class="form-select horas">
+                            <select name="domingoFin" id="fDomingoFin" class="form-select">
+                                ##domingoFin##
                             </select>
                         </td>
                     </tr>
@@ -173,13 +194,13 @@
         </div>
         <div class="col-12">
             <label for="fExperiencia" class="form-label">Experiencia</label>
-            <textarea name="experiencia" class="form-control mt-3" id="fExperiencia" rows="10" required></textarea>
+            <textarea name="experiencia" class="form-control mt-3" id="fExperiencia" rows="10" required>##valueDescripcion##</textarea>
             <div class="valid-feedback">Válido.</div>
             <div class="invalid-feedback">Por favor escriba su experiencia laboral.</div>
         </div>
         <div class="col-md-12">
             <div class="form-check">
-                <input name="vehiculo" class="form-check-input" type="checkbox" id="fvehiculo">
+                <input name="vehiculo" class="form-check-input" type="checkbox" id="fvehiculo" ##checked##>
                 <label class="form-check-label" for="fvehiculo" id="fvehiculolabel">
                     Vehículo Propio (La casilla marcada indica que dispone de el)
                 </label>
@@ -202,32 +223,6 @@
         crossorigin="anonymous"></script>
 <script type="text/javascript">
     document.getElementById("carga").style.display = "none";
-
-    $( ".horas" ).append( "<option selected value='00:01:00.0000000'>00:01</option>\n" +
-        "    <option value='01:00:00.0000000'>01:00</option>\n" +
-        "    <option value='02:00:00.0000000'>02:00</option>\n" +
-        "    <option value='03:00:00.0000000'>03:00</option>\n" +
-        "    <option value='04:00:00.0000000'>04:00</option>\n" +
-        "    <option value='05:00:00.0000000'>05:00</option>\n" +
-        "    <option value='06:00:00.0000000'>06:00</option>\n" +
-        "    <option value='07:00:00.0000000'>07:00</option>\n" +
-        "    <option value='08:00:00.0000000'>08:00</option>\n" +
-        "    <option value='09:00:00.0000000'>09:00</option>\n" +
-        "    <option value='10:00:00.0000000'>10:00</option>\n" +
-        "    <option value='11:00:00.0000000'>11:00</option>\n" +
-        "    <option value='12:00:00.0000000'>12:00</option>\n" +
-        "    <option value='13:00:00.0000000'>13:00</option>\n" +
-        "    <option value='14:00:00.0000000'>14:00</option>\n" +
-        "    <option value='15:00:00.0000000'>15:00</option>\n" +
-        "    <option value='16:00:00.0000000'>16:00</option>\n" +
-        "    <option value='17:00:00.0000000'>17:00</option>\n" +
-        "    <option value='18:00:00.0000000'>18:00</option>\n" +
-        "    <option value='19:00:00.0000000'>19:00</option>\n" +
-        "    <option value='20:00:00.0000000'>20:00</option>\n" +
-        "    <option value='21:00:00.0000000'>21:00</option>\n" +
-        "    <option value='22:00:00.0000000'>22:00</option>\n" +
-        "    <option value='23:00:00.0000000'>23:00</option>\n" +
-        "    <option value='23:59:00.0000000'>23:59</option>" );
 
     function cargarprovincias(){
         var valor = $("#comunidad_autonoma option:selected" ).val();

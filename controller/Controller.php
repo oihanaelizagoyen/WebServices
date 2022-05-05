@@ -24,7 +24,7 @@ if (isset($_SESSION['id_usuario']) && isset($_SESSION['contrasena']) && isset($_
 
     /*
 if ((time() - $tiempo) > 600) {
-    $accion = "abrirIniciarSesion";
+    $accion = "cerrarSesion";
     session_unset();
 } else {
     $_SESSION['tiempo'] = time();
@@ -215,7 +215,38 @@ switch ($accion) {
     case 'abrirEditarPerfil':
         if ($logedin == true) {
             //Me faltaría obtener los datos de la base y del api -->Modificar Empresa, Empleado API Y BBDD
-            vMostrarEditarPerfil(obtenerDatosPagina(), obtenerComunidadesAutonomas(), obtenerProvincias(), obtenerPoblaciones());
+            $datosEditarPerfil = obtenerDatosParaEditarPerfil($_SESSION['id_usuario']);
+            if ($datosEditarPerfil != "error_api"){
+                vMostrarEditarPerfil(obtenerDatosPagina(),  obtenerCategorias(), obtenerProvincias(), obtenerComunidadesAutonomas(), obtenerPoblaciones(), $datosEditarPerfil);
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api_perfil");
+            }
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'editarPerfil':
+        if ($logedin == true) {
+            $datosPerfilArray = obtenerDatosPerfilArray($_SESSION['id_usuario']);
+            if (!$datosPerfilArray[count($datosPerfilArray) - 1]) {
+                //Me faltaría obtener los datos de la base y del api -->Modificar Empresa, Empleado API Y BBDD
+                $editarUsuario = editarUsuario($_SESSION['id_usuario']);
+                if ($editarUsuario == "error_api") {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api");
+                } elseif ($editarUsuario == "error_base") {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_base");
+                } elseif ($editarUsuario == "error_imagen_base") {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_imagen_base");
+                } else {
+                    vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosPerfilArray, obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+                }
+            } else {
+                if ($logedin == true) {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_api_perfil");
+                } else {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_api_perfil");
+                }
+            }
         } else {
             vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
         }
@@ -251,7 +282,6 @@ switch ($accion) {
         break;
     case 'registrar':
         if ($logedin == false) {
-            echo "hola";
             $empresa = crearEmpresaApi();
             if (isset($empresa['id'])) {
 
