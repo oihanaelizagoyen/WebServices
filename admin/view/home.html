@@ -172,18 +172,10 @@
             });
         }
 
-        function eliminarCategoria(){
-
-        }
-
-        function obtenerCambiarCategoria(){
-
-        }
-
-        function crearNuevaCategoria(){
+        function obtenerCrearNuevaCategoria(){
             $.ajax({
                 type: "GET",
-                url: "./index.php?accion=crearNuevaCategoria",
+                url: "./index.php?accion=obtenerCrearNuevaCategoria",
                 success: function (response) {
                     $("#contenido").html(response);
                 }
@@ -192,6 +184,17 @@
 
         function crearCategoria(){
 
+        }
+
+        function obtenerModificarCategoria(){
+            id_categoria = $("#id_categoria").val();
+            $.ajax({
+                type: "GET",
+                url: "./index.php?accion=obtenerModificarCategoria&id=" + id_categoria,
+                success: function (response) {
+                    $("#contenido").html(response);
+                }
+            });
         }
     </script>
 </body>

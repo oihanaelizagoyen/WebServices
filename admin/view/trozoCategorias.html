@@ -14,8 +14,9 @@
                         <div class="card-body">
                             <h5 class="card-title">##nombreCategoria##</h5>
                             <p class="card-text">##categoriaDescripcion##</p>
-                            <button onclick="eliminarCategoria();" class="btn btn-danger" type="button">Eliminar</button>
-                            <button onclick="obtenerCambiarCategoria();" class="btn btn-primary" type="button">Cambiar</button>
+                            <input type="text" id="id_categoria" name="id_categoria" value="##idCategoria##" hidden>
+                            <a class="btn btn-danger" type="button" href="./index.php?accion=eliminarCategoria&id=##idCategoria##">Eliminar</a>
+                            <button onclick="obtenerModificarCategoria()" class="btn btn-primary" type="button">Cambiar</button>
                         </div>
                     </div>
                 </div>
@@ -25,5 +26,5 @@
     </ul>
 </div>
 <div class="col-12 d-flex justify-content-center">
-    <button onclick="crearNuevaCategoria();" class="btn btn-primary m-4 fw-bold" type="button" id="crear_nueva_categoria">Crear nueva categoría</button>
+    <button onclick="obtenerCrearNuevaCategoria();" class="btn btn-primary m-4 fw-bold" type="button" id="crear_nueva_categoria">Crear nueva categoría</button>
 </div>

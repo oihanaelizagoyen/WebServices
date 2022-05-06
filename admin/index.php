@@ -75,12 +75,39 @@ switch ($accion) {
     case 'guardarDatos':
         vMostrarHome(obtenerDatosPagina(), validarGuardarDatos());
         break;
-    case 'eliminarCategoria':
+    case 'eliminarCategoria': //TODO
+        if (isset($_GET['id'])){
+            $idCategoria = $_GET['id'];
+
+        }else{
+            vMostrarHome(obtenerDatosPagina(), "error_id_eliminar_categoria");
+        }
         break;
-    case 'obtenerCambiarCategoria':
+    case 'obtenerModificarCategoria':
+        if (isset($_GET['id'])){
+            $idCategoria = $_GET['id'];
+            vMostrarModificarCategoria(obtenerCategoria($idCategoria));
+        }else{
+            vMostrarHome(obtenerDatosPagina(), "error_id_modificar_categoria");
+        }
+        break;
+    case 'guardarDatosCategoria':
+        $resultado_modificar_categoria = validarGuardarDatosCategoria();
+        if ($resultado_modificar_categoria == "ok"){
+
+        }else{
+            vMostrarHome(obtenerDatosPagina(), $resultado_modificar_categoria);
+        }
+        break;
+    case 'obtenerCrearNuevaCategoria':
+        vMostrarCrearNuevaCategoria();
         break;
     case 'crearNuevaCategoria':
-        break;
-    case 'crearCategoria':
+        $resultado_creacion_categoria = anadirCategoria();
+        if($resultado_creacion_categoria == "ok"){
+            vMostrarSeccionCategoriasServicios(obtenerCategorias());
+        }else{
+            vMostrarHome(obtenerDatosPagina(), $resultado_creacion_categoria);
+        }
         break;
 }

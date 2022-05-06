@@ -18,6 +18,14 @@ function obtenerCategorias()
     return $resultadoCategorias;
 }
 
+function obtenerCategoria($id_categoria)
+{
+    $conn = DatabaseConnSingleton::getConn();
+    $consultaCategoria = "select * from final_Categoria where id='". $id_categoria ."';";
+    $resultadoCategoria = $conn->query($consultaCategoria);
+    return $resultadoCategoria;
+}
+
 
 function obtenerAdminDb($id_admin)
 {
@@ -221,11 +229,11 @@ function obtenerUsuariosDb()
 function anadirCategoria(){
 
     if(!isset($_POST['nombre']) && !isset($_POST['descripcion'])){
-        return "error";
+        return "error_anadir_categoria";
     }
 
     if ($_FILES['imgCategoria']['size'] == 0 && $_FILES['imgCategoria']['error'] == 0){
-        return "error_imagen";
+        return "error_imagen_anadir_categoria";
     }
 
     $tipo = $_FILES['imgCategoria']['type'];
@@ -239,24 +247,24 @@ function anadirCategoria(){
     } elseif ($tipo = "image/gif") {
         $nombrefichero = time() . "-" . uniqid() . ".gif";
     } else {
-        return "error_imagen";
+        return "error_imagen_anadir_categoria";
     }
 
     $temporal = $_FILES['imgCategoria']['tmp_name'];
 
     if ($temporal == "") {
-        return "error_imagen";
+        return "error_imagen_anadir_categoria";
     }
 
     if (!move_uploaded_file($temporal, '../imagenes/' . $nombrefichero)) {
-        return "error_imagen";
+        return "error_imagen_anadir_categoria";
     }
     $conn = DatabaseConnSingleton::getConn();
     if ($conn->query("INSERT INTO final_Categoria (nombre, descripcion, imagen) VALUES ('" . $_POST['nombre'] . "','" . $_POST['descripcion'] . "','" . $nombrefichero . "')") == TRUE) {
         return "ok";
     } else {
         DatabaseConnSingleton::closeConn();
-        return "error";
+        return "error_anadir_categoria";
     }
 }
 
