@@ -48,6 +48,10 @@ function vMostrarHome($sesion, $datosPagina, $categorias, $empleado = null, $err
         $trozos2[0] = str_replace("##tipoAlerta##", "success", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Se ha cerrado sesión con éxito", $trozos2[0]);
+    } elseif ($errores == "ok_perfil_actualizado") {
+        $trozos2[0] = str_replace("##tipoAlerta##", "success", $trozos2[0]);
+        $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+        $trozos2[0] = str_replace("##mensajeNotificacion##", "Se ha actualizado el perfil correctamente, puede acceder a la sección de perfil para comprobarlo", $trozos2[0]);
     } elseif ($errores == "error_empleado_db") {
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
@@ -328,7 +332,7 @@ function vMostrarServicio($sesion, $datosPagina, $categorias, $arrayDatosServici
     $trozos3[0] = str_replace("##idUsuarioServicio##", $usuarioDb['id'], $trozos3[0]);
     $trozos3[0] = str_replace("##idServicio##", $servicioDb['id'], $trozos3[0]);
     $trozos3[0] = str_replace("##idEmpresa##", $usuarioDb['id_empresa'], $trozos3[0]);
-    //TODO copiar de aquí
+
     $trozoComunidadesAutonomas = "";
     $idComunidadAutonoma = "";
     while ($datosComunidadAutonoma = $comunidadesAutonomas->fetch_assoc()) {
@@ -548,6 +552,14 @@ function vMostrarPerfil($autentificado, $datosPagina, $categorias, $arrayDatosPe
         $aux = str_replace("##precioServicio##", $serviciosApi[$numServicio]["defaultPrice"], $aux);
         $aux = str_replace("##idServicio##", $serviciosDb[$numServicio]['id'], $aux);
         $arrayServiciosIdNombre[$serviciosDb[$numServicio]['id']] = $serviciosApi[$numServicio]["displayName"];
+
+        //Eliminar servicio
+        if ($autentificado && ($_SESSION["id_usuario"] == $usuarioDb['id'])) {
+            $aux = str_replace("##mostrarEliminar##", "", $aux);
+        } else {
+            $aux = str_replace("##mostrarEliminar##", "hidden", $aux);
+        }
+
         $servicios .= $aux;
     }
 

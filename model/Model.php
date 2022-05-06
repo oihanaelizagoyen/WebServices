@@ -80,6 +80,7 @@ function crearEmpleadoDb($id_empleado, $id_empresa)
         }
 
         $temporal = $_FILES['imgPerfil']['tmp_name'];
+        //chmod($temporal, 777);
 
         if (!move_uploaded_file($temporal, '../imagenes/fotosperfil/' . $nombrefichero)) {
             return "error";
@@ -621,6 +622,65 @@ function crearServicio($id_usuario)
     }
 }
 
+function cancelarCita($id_cita, $id_empresa, $correo)
+{
+        $datos = array(
+            "cancellationMessage" => "Su cita ha sido cancelada por la eliminacion del servicio. Para cualquier consulta contacte con ella por medio de correo electrónico: \"" . $correo . "\""
+        );
+
+        $curl = new Curl();
+        $respuesta = $curl->postGenerate('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/' . $id_empresa . '/appointments/' . $id_cita . '/cancel', $datos);
+
+        if (empty($respuesta)) {
+            return "ok_cancelacion";
+        } else {
+            return "error_cancelacion_api";
+        }
+}
+
+function eliminarServicioApi(){
+//TODO
+
+
+}
+
+function eliminarServicio($id_usuario, $id_Servicio){
+
+    $usuario_ = obtenerUsuarioDb($id_usuario);
+    $usuario = $usuario_->fetch_assoc();
+
+    if(!isset($usuario['id_empresa'])){
+        return "error";
+    }
+
+    $resultadoCitasApi = obtenerCitasApi($usuario['id_empresa']);
+    if (!isset($resultadoCitasApi["value"])) {
+        return "error_api";
+    }
+
+    $citasApi = array();
+    if(isset($resultadoCitasApi["value"])) {
+        $listaCitasApi = $resultadoCitasApi["value"];
+        for ($numCita = 0; $numCita < count($listaCitasApi); $numCita++) {
+            $resultado_cancelacion = cancelarCita($listaCitasApi[$numCita]["id"], $usuario['id_empresa'], $usuario['correo']);
+            if(!$resultado_cancelacion == "ok_cancelacion"){
+                return "error_api";
+            }
+        }
+    }else{
+        return "error_error_api";
+    }
+
+    //TODO DELETE https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/Contosolunchdelivery@contoso.onmicrosoft.com/services/57da6774-a087-4d69-b0e6-6fb82c339976
+    $respuesta = eliminarServicioApi();
+
+    if(isset($respuesta['error'])){
+        return "error";
+    } else {
+        return "servicio_eliminado_ok";
+    }
+}
+
 function crearEmpresaApi()
 {
 
@@ -787,6 +847,8 @@ function actualizarEmpleadoDb($id_empleado)
         $temporal = $_FILES['imgPerfil']['tmp_name'];
 
         if ($temporal == ""){
+            //chmod($temporal, 777);
+
             $conn = DatabaseConnSingleton::getConn();
             if ($conn->query("UPDATE final_Usuario SET vehiculo_propio='". $vehiculo ."', experiencia='". $experiencia ."' WHERE id='". $id_empleado ."'") == TRUE) {
                 return "ok";
@@ -1080,6 +1142,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1088,6 +1152,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $lunesIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $lunesFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $lunesIni,
@@ -1108,6 +1173,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1116,6 +1183,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $martesIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $martesFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $martesIni,
@@ -1136,6 +1204,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1144,6 +1214,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $miercolesIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $miercolesFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $miercolesIni,
@@ -1164,6 +1235,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1172,6 +1245,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $juevesIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $juevesFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $juevesIni,
@@ -1192,6 +1266,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1200,6 +1276,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $viernesIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $viernesFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $viernesIni,
@@ -1220,6 +1297,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1228,6 +1307,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $sabadoIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $sabadoFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $sabadoIni,
@@ -1248,6 +1328,8 @@ function crearEmpleadoApi($id_empresa)
         $int_ini_hora = (int)$ini_horas[0];
         $int_fin_hora = (int)$fin_horas[0];
         if (($int_ini_hora - $int_fin_hora) != 0) {
+            /*
+             * Resta dos horas, por problemas de graph explorer con horario no UTC
             if (($int_ini_hora - 2) <= 0) {
                 $int_ini_hora = 2;
             }
@@ -1256,6 +1338,7 @@ function crearEmpleadoApi($id_empresa)
             }
             $domingoIni = ($int_ini_hora - 2) . ":" . $ini_horas[1] . ":" . $ini_horas[2];
             $domingoFin = ($int_fin_hora - 2) . ":" . $fin_horas[1] . ":" . $fin_horas[2];
+            */
             $TimeSlots_ = array(
                 "@odata.type" => "#microsoft.graph.bookingWorkTimeSlot",
                 "startTime" => $domingoIni,

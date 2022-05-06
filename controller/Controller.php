@@ -238,7 +238,7 @@ switch ($accion) {
                 } elseif ($editarUsuario == "error_imagen_base") {
                     vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_imagen_base");
                 } else {
-                    vMostrarPerfil($logedin, obtenerDatosPagina(), obtenerCategorias(), $datosPerfilArray, obtenerDatosEmpleadoDb($_SESSION['id_usuario']));
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "ok_perfil_actualizado");
                 }
             } else {
                 if ($logedin == true) {
@@ -261,10 +261,26 @@ switch ($accion) {
                     vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_nuevo_servicio");
                 }
             } else {
-                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
             }
         } else {
-            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_generico");
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+        }
+        break;
+    case 'eliminarServicio':
+        if ($logedin == true) {
+            if (isset($_SESSION['id_usuario']) && isset($_GET['id_servicio'])) {
+                $respuesta = eliminarServicio($_SESSION['id_usuario'], $_GET['id_servicio']);
+                if ($respuesta == 'ok') {
+
+                } else {
+
+                }
+            } else {
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+            }
+        } else {
+            vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
         }
         break;
     case 'iniciarSesion':
