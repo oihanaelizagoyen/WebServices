@@ -16,8 +16,6 @@ if (isset($_GET['accion'])) {
     $accion = 'mostrarIniciarSesion';
 }
 
-//var_dump(password_verify("admin", "$2y$10$0jyYRpGtyxU8mWiqdR2JUuFXxIr2prTexdM/0pZZaorhJmaSwRxoS"));
-
 if($accion != 'iniciarSesion'){
     if (isset($_SESSION['id_admin']) && isset($_SESSION['contrasena']) && isset($_SESSION['tiempo'])){
         if($adminDb = obtenerAdminDb($_SESSION['id_admin'])->fetch_assoc()){
