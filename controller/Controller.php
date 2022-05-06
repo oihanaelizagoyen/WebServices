@@ -271,13 +271,13 @@ switch ($accion) {
         if ($logedin == true) {
             if (isset($_SESSION['id_usuario']) && isset($_GET['id_servicio'])) {
                 $respuesta = eliminarServicio($_SESSION['id_usuario'], $_GET['id_servicio']);
-                if ($respuesta == 'ok') {
-
+                if ($respuesta == 'servicio_eliminado_ok') {
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "servicio_eliminado_ok");
                 } else {
-
+                    vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_eliminando_servicio");
                 }
             } else {
-                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
+                vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), obtenerDatosEmpleadoDb($_SESSION['id_usuario']), "error_eliminando_servicio");
             }
         } else {
             vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");

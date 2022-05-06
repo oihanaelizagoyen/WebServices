@@ -1,0 +1,37 @@
+<div class="d-flex justify-content-center">
+    <div class="row mt-3" style="width: 80%">
+        <div class="col-12 mb-3">
+            <h1 class="fw-bold text-center text-decoration-underline mt-2 mb-4 fs-5">LISTA DE USUARIOS</h1>
+        </div>
+        <div class="col-12 d-flex justify-content-end">
+            <button class="btn btn-primary mb-4 fw-bold" type="button" id="obtener_csv_usuarios"
+                    title="Botón para obtener un csv con la lista de los usuarios existentes.">OBTENER CSV</button>
+        </div>
+        <div class="table-responsive-sm table-responsive-md table-responsive-lg table-responsive-xl">
+            <table class="table table-striped" id="tabla_usuarios">
+                <thead>
+                <tr>
+                    <th scope="col">ID Usuario</th>
+                    <th scope="col">Foto de perfil</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo electrónico</th>
+                    <th scope="col">Vehiculo propio</th>
+                    <th scope="col">Experiencia</th>
+                </tr>
+                </thead>
+                <tbody>
+                ##filaUsuario##
+                <tr>
+                    <th scope="row">##idUsuario##</th>
+                    <th scope="row"><img src="../imagenes/fotosperfil/##fotoPerfilUsuario##" class="rounded-circle" alt="Foto perfil" width="60%" height="auto"></th>
+                    <td>##nombreUsuario##</td>
+                    <td>##emailUsuario##</td>
+                    <td>##vehiculoPropio##</td>
+                    <td>##experienciaUsuario##</td>
+                </tr>
+                ##filaUsuario##
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

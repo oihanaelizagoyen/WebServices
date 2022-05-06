@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-center">
+    <div class="row mt-3" style="width: 70%">
+        <div class="col-12 mb-3">
+            <h1 class="fw-bold text-center text-decoration-underline mt-2 mb-4 fs-5">DATOS DE LA PÁGINA WEB</h1>
+        </div>
+        <form action="./index.php" method="post" enctype="multipart/form-data">
+            <input class="form-control" type="text" id="accion" name="accion" value="guardarDatos" hidden>
+            <div class="col-12 mt-3 mb-3">
+                <label class="fw-bold form-label" for="nombre_pagina_web">Nombre de la página web:</label>
+                <input class="form-control" type="text" id="nombre_pagina_web" name="nombre_pagina_web" value="##nombrePaginaWeb##" required>
+                <div class="invalid-feedback">
+                    Introduzca un nombre para la página web.
+                </div>
+            </div>
+            <div class="col-12 mt-3 mb-3">
+                <label class="fw-bold form-label" for="logo_pagina_web">Imagen para el logo de la pagina web: </label>
+                <input class="form-control" type="file" id="logo_pagina_web" name="logo_pagina_web" accept="image/png, image/gif, image/jpeg, /image/jpg" aria-label="imagen_logo">
+                <div class="invalid-feedback">
+                    Añada una imagen para el logo de la página web.
+                </div>
+            </div>
+            <div class="col-12 mt-3 mb-3">
+                <label class="fw-bold form-label" for="descripcion_pagina_web">Descripción:</label>
+                <textarea class="form-control" id="descripcion_pagina_web" name="descripcion_pagina_web" rows="10" required>##descripcionPaginaWeb##</textarea>
+                <div class="invalid-feedback">
+                    Introduzca una descripción para la página web.
+                </div>
+            </div>
+            <div class="col-12 mt-3 mb-3">
+                <label class="fw-bold form-label" for="imagen_descrip_pagina_web">Imagen para la descripción de la pagina web:</label>
+                <input class="form-control" type="file" id="imagen_descrip_pagina_web" name="imagen_descrip_pagina_web" accept="image/png, image/gif, image/jpeg, /image/jpg" aria-label="imagen_descripcion">
+                <div class="invalid-feedback">
+                    Añada una imagen para la descripción de la página web.
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <button class="btn btn-primary m-4 fw-bold" type="submit" id="guardar_datos_pagina">Guardar datos</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administración</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        body{
+            background-color: #ffa69e;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid mt-5 justify-content-md-center w-75 pt-3 pb-5">
+    <div class="row justify-content-md-center mb-2">
+        <div class="col-md-3">
+            <h1>Iniciar Sesión</h1>
+        </div>
+    </div>
+    <div class="alert alert-##tipoAlerta## alert-dismissible" role="alert" ##visibilidad##>
+        ##mensajeNotificacion##
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div class="row d-flex justify-content-center align-items-center h-100 mt-4">
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <form id="formuLogin" action="./index.php" method="post">
+                <input type="text" name="accion" value="iniciarSesion" hidden>
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    <input name="nombreAdmin" type="text" id="fnombre" class="form-control form-control-lg"
+                           placeholder="Ingresa el nombre de administrador"/>
+                    <label class="form-label" for="fnombre">Nombre de administrador</label>
+                </div>
+                <!-- Password input -->
+                <div class="form-outline mb-3">
+                    <input name="contrasena" type="password" id="fcontrasena" class="form-control form-control-lg"
+                           placeholder="Ingresa una contraseña"/>
+                    <label class="form-label" for="fcontrasena">Contraseña</label>
+                </div>
+                <div class="d-flex justify-content-center text-center text-lg-start mt-4 pt-2">
+                    <input type="submit" class="btn btn-dark btn-lg" id="botonInicar" style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Iniciar sesión"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+</html>

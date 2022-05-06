@@ -52,6 +52,10 @@ function vMostrarHome($sesion, $datosPagina, $categorias, $empleado = null, $err
         $trozos2[0] = str_replace("##tipoAlerta##", "success", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Se ha actualizado el perfil correctamente, puede acceder a la sección de perfil para comprobarlo", $trozos2[0]);
+    } elseif ($errores == "servicio_eliminado_ok") {
+        $trozos2[0] = str_replace("##tipoAlerta##", "success", $trozos2[0]);
+        $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+        $trozos2[0] = str_replace("##mensajeNotificacion##", "El servicio se ha eliminado corréctamente, se ha enviado un correo cancelando la cita a cada uno de los usuarios que tenía una reserva", $trozos2[0]);
     } elseif ($errores == "error_empleado_db") {
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
@@ -88,11 +92,15 @@ function vMostrarHome($sesion, $datosPagina, $categorias, $empleado = null, $err
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la conexión de la base de datos, no se han podido obtener los datos para actualizar", $trozos2[0]);
-    }elseif($errores == "error_imagen_base"){
+    } elseif($errores == "error_imagen_base"){
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Error en la imagen de perfil, ha tratado de insertar un formato no permitido", $trozos2[0]);
-    }  elseif (($errores == "error_generico")) {
+    } elseif($errores == "error_eliminando_servicio"){
+        $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
+        $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
+        $trozos2[0] = str_replace("##mensajeNotificacion##", "¡Error! No se ha podido eliminar el servicio, es posible que falte el token", $trozos2[0]);
+    } elseif (($errores == "error_generico")) {
         $trozos2[0] = str_replace("##tipoAlerta##", "danger", $trozos2[0]);
         $trozos2[0] = str_replace("##visibilidad##", "", $trozos2[0]);
         $trozos2[0] = str_replace("##mensajeNotificacion##", "Ha ocurrido un error", $trozos2[0]);

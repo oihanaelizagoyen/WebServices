@@ -625,7 +625,7 @@ function crearServicio($id_usuario)
 function cancelarCita($id_cita, $id_empresa, $correo)
 {
         $datos = array(
-            "cancellationMessage" => "Su cita ha sido cancelada por la eliminacion del servicio. Para cualquier consulta contacte con ella por medio de correo electrónico: \"" . $correo . "\""
+            "cancellationMessage" => "Su cita ha sido cancelada por la eliminacion del servicio. Para cualquier consulta contacte con la persona por medio de correo electrónico: \"" . $correo . "\""
         );
 
         $curl = new Curl();
@@ -638,47 +638,58 @@ function cancelarCita($id_cita, $id_empresa, $correo)
         }
 }
 
-function eliminarServicioApi(){
-//TODO
-
-
-}
-
-function eliminarServicio($id_usuario, $id_Servicio){
-
-    $usuario_ = obtenerUsuarioDb($id_usuario);
-    $usuario = $usuario_->fetch_assoc();
-
-    if(!isset($usuario['id_empresa'])){
-        return "error";
-    }
-
-    $resultadoCitasApi = obtenerCitasApi($usuario['id_empresa']);
-    if (!isset($resultadoCitasApi["value"])) {
-        return "error_api";
-    }
-
-    $citasApi = array();
-    if(isset($resultadoCitasApi["value"])) {
-        $listaCitasApi = $resultadoCitasApi["value"];
-        for ($numCita = 0; $numCita < count($listaCitasApi); $numCita++) {
-            $resultado_cancelacion = cancelarCita($listaCitasApi[$numCita]["id"], $usuario['id_empresa'], $usuario['correo']);
-            if(!$resultado_cancelacion == "ok_cancelacion"){
-                return "error_api";
-            }
-        }
-    }else{
-        return "error_error_api";
-    }
-
-    //TODO DELETE https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/Contosolunchdelivery@contoso.onmicrosoft.com/services/57da6774-a087-4d69-b0e6-6fb82c339976
-    $respuesta = eliminarServicioApi();
+function eliminarServicioApi($id_empresa, $id_servicio){
+    $curl = new Curl();
+    $respuesta = $curl->deleteGenerate('https://graph.microsoft.com/v1.0/solutions/bookingBusinesses/' . $id_empresa . '/services/' . $id_servicio);
 
     if(isset($respuesta['error'])){
         return "error";
     } else {
+        return "ok";
+    }
+
+}
+
+function eliminarServicio($id_usuario, $id_servicio){
+
+    $usuario_ = obtenerUsuarioDb($id_usuario);
+    $usuario = $usuario_->fetch_assoc();
+
+    if(!isset($usuario['id_empresa']) && !isset($usuario['correo'])){
+        return "error";
+    }
+    $id_empresa = $usuario['id_empresa'];
+    $correo = $usuario['email'];
+    $resultadoCitasApi = obtenerCitasApi($id_empresa);
+    if (!isset($resultadoCitasApi["value"])) {
+        return "error_api";
+    }
+
+    if(isset($resultadoCitasApi["value"])) {
+        $listaCitasApi = $resultadoCitasApi["value"];
+        for ($numCita = 0; $numCita < count($listaCitasApi); $numCita++) {
+            if ($listaCitasApi[$numCita]['serviceId'] == $id_servicio){
+                $resultado_cancelacion = cancelarCita($listaCitasApi[$numCita]["id"], $id_empresa, $correo);
+                if(!$resultado_cancelacion == "ok_cancelacion"){
+                    return "error_api";
+                }
+            }
+        }
+    }else{
+        return "error_api";
+    }
+
+    $respuesta = eliminarServicioApi($usuario['id_empresa'], $id_servicio);
+    if($respuesta == "error"){
+        return "error_eliminando_servicio";
+    }
+
+    $conn = DatabaseConnSingleton::getConn();
+    $deleteServicio = "DELETE FROM final_Servicio WHERE id='" . $id_servicio . "'";
+    if ($resultadoDelete = $conn->query($deleteServicio)) {
         return "servicio_eliminado_ok";
     }
+    return "error_bd";
 }
 
 function crearEmpresaApi()
@@ -820,7 +831,7 @@ function actualizarEmpleadoDb($id_empleado)
             $vehiculo = 0;
         }
 
-        if ($tipo = $_FILES['imgPerfil']['size'] == 0 && $_FILES['imgPerfil']['error'] == 0){
+        if ($_FILES['imgPerfil']['size'] == 0 && $_FILES['imgPerfil']['error'] == 0){
             $conn = DatabaseConnSingleton::getConn();
             if ($conn->query("UPDATE final_Usuario SET vehiculo_propio='". $vehiculo ."', experiencia='". $experiencia ."' WHERE id='". $id_empleado ."'") == TRUE) {
                 return "ok";
