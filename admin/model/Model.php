@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/DatabaseConnSingleton.php';
+require_once __DIR__ . '/pdf.php';
 require_once __DIR__ . '/Curl.php';
 
 function obtenerDatosPagina()
@@ -276,7 +277,10 @@ function eliminarCategoria($id_categoria){
     $servicios = $conn->query($consultaServicios);
 
     while($servicio = $servicios->fetch_assoc()){
-        eliminarServicio($servicio['id']);
+        $respuesta = eliminarServicio($servicio['id']);
+        if($respuesta == "error_api"){
+            return "error_eliminar_categoria";
+        }
     }
 
     $deleteCategoria = "DELETE FROM final_Categoria WHERE id=" . $id_categoria . ";";
@@ -328,7 +332,7 @@ function eliminarServicio($id_servicio){
     $servicio = $servicio_->fetch_assoc();
 
     if(!isset($servicio['id_empresa'])){
-        return "error";
+        return "error_api";
     }
     $id_empresa = $servicio['id_empresa'];
     $resultadoCitasApi = obtenerCitasApi($id_empresa);
@@ -421,4 +425,54 @@ function validarGuardarDatosCategoria()
     }else{
         return "error_actualizacion_categoria";
     }
+}
+
+function crearCsvUsuarios(){
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="usuarios.csv"');
+
+    $user_CSV[0] = array('Id usuario', 'Nombre', 'Correo electrónico', 'Vehículo propio', 'Experiencia');
+
+    $usuarios = obtenerUsuariosDb();
+    $i = 1;
+    while ($usuario = $usuarios->fetch_assoc()){
+        $vehiculo = "";
+        if ($usuario['vehiculo_propio'] == 0){
+            $vehiculo = "No";
+        } elseif ($usuario['vehiculo_propio'] == 1){
+            $vehiculo = "Si";
+        }
+        $user_CSV[$i] = array($usuario['id'], $usuario['nombre'], $usuario['email'], $vehiculo, $usuario['experiencia']);
+        $i++;
+    }
+
+    $fp = fopen('php://output', 'wb');
+    foreach ($user_CSV as $line) {
+        fputcsv($fp, $line, ',');
+    }
+    fclose($fp);
+}
+
+function obtenerPdfServicios(){
+
+$conn = DatabaseConnSingleton::getConn();
+$consultaUServicios = "SELECT id, id_categoria, fecha_publicacion, precio, id_usuario FROM final_Servicio";
+$resultadoServicios = $conn->query($consultaUServicios);
+
+$pdf = new PDF();
+$pdf->AliasNbPages();
+$pdf->addPage('L');
+$pdf->SetFont('Arial','B',8);
+
+
+while ($row=$resultadoServicios->fetch_assoc()) {
+    $pdf->Cell(55,10,$row['id'],1,0,'C',0);
+    $pdf->Cell(55,10,$row['id_categoria'],1,0,'C',0);
+    $pdf->Cell(55,10,$row['fecha_publicacion'],1,0,'C',0);
+    $pdf->Cell(55,10,$row['precio'],1,0,'C',0);
+    $pdf->Cell(55,10,$row['id_usuario'],1,1,'C',0);
+
+} 
+
+    $pdf->Output();
 }

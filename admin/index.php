@@ -23,6 +23,8 @@ if($accion != 'iniciarSesion'){
                 if((time() - $_SESSION['tiempo']) > 600){
                     $comentarios_login = "tiempo_expirado";
                     $accion = 'mostrarIniciarSesion';
+                    $logedin = false;
+                    session_unset();
                 }else{
                     $logedin = true;
                     $_SESSION['tiempo'] = time();
@@ -99,6 +101,9 @@ switch ($accion) {
         break;
     case 'crearNuevaCategoria':
         vMostrarHome(obtenerDatosPagina(), anadirCategoria());
+        break;
+    case 'crearCsv':
+        crearCsvUsuarios();
         break;
     case 'cerrarSesion':
         if($logedin == true){
