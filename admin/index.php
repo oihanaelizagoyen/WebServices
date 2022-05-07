@@ -105,6 +105,9 @@ switch ($accion) {
     case 'crearCsv':
         crearCsvUsuarios();
         break;
+    case 'crearPdf':
+        crearPdfServicios();
+        break;
     case 'cerrarSesion':
         if($logedin == true){
             $logedin = false;
