@@ -39,10 +39,6 @@ function vMostrarHome($datosPagina, $mensajeNotificacion = "ok")
         $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
         $cadena = str_replace("##visibilidad##", "", $cadena);
         $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error y los datos de la página no han podido ser actualizados.", $cadena);
-    }elseif($mensajeNotificacion == "error_servicios_api"){
-        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
-        $cadena = str_replace("##visibilidad##", "", $cadena);
-        $cadena = str_replace("##mensajeNotificacion##", "Error en la conexión con Microsoft 365, no se han podido obtener los datos de los servicios, verificar token", $cadena);
     }elseif($mensajeNotificacion == "error_imagen_anadir_categoria"){
         $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
         $cadena = str_replace("##visibilidad##", "", $cadena);
@@ -51,14 +47,30 @@ function vMostrarHome($datosPagina, $mensajeNotificacion = "ok")
         $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
         $cadena = str_replace("##visibilidad##", "", $cadena);
         $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error y la categoría no se ha podido crear.", $cadena);
+    }elseif($mensajeNotificacion == "correcta_creacion_categoria"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "La categoría se ha creado correctamente. Acceda a la sección de categorías para comprobarlo.", $cadena);
     }elseif($mensajeNotificacion == "error_id_eliminar_categoria"){
         $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
         $cadena = str_replace("##visibilidad##", "", $cadena);
         $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error al obtener el id de la categoría que se desea eliminar.", $cadena);
-    }elseif($mensajeNotificacion == "error_id_modificar_categoria"){
+    }elseif($mensajeNotificacion == "error_actualizacion_categoria"){
         $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
         $cadena = str_replace("##visibilidad##", "", $cadena);
-        $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error al obtener el id de la categoría que se desea modificar.", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error y los datos de la página no han podido ser actualizados.", $cadena);
+    }elseif($mensajeNotificacion == "correcta_actualizacion_categoria"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "La categoría se ha actualizado correctamente. Acceda a la sección de categorías para comprobarlo.", $cadena);
+    }elseif($mensajeNotificacion == "error_eliminar_categoria"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error y la categoría no se ha eliminado.", $cadena);
+    }elseif($mensajeNotificacion == "servicio_eliminado_ok"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "La categoría se ha eliminado correctamente. Acceda a la sección de categorías para comprobarlo.", $cadena);
     }
 
     $datosPagina = obtenerDatosPagina()->fetch_assoc();
@@ -66,6 +78,7 @@ function vMostrarHome($datosPagina, $mensajeNotificacion = "ok")
     $cadena = str_replace("##imagenLogo##", $datosPagina['logo'], $cadena);
     $cadena = str_replace("##descripcionPaginaWeb##", $datosPagina['descripcion'], $cadena);
     $cadena = str_replace("##imagenDescripcion##", $datosPagina['imagen_descripcion'], $cadena);
+    $cadena = str_replace("##contenido##", "", $cadena);
 
     echo $cadena;
 }
@@ -81,9 +94,21 @@ function vMostrarModificarDatos($datosPagina)
     echo $cadena;
 }
 
-function vMostrarSeccionDatosPagina($datosPagina)
+function vMostrarSeccionDatosPagina($datosPagina, $mensajeNotificacion = "ok")
 {
     $cadena = file_get_contents(__DIR__ . "/trozoDatosWeb.html");
+
+    if($mensajeNotificacion == "ok"){
+        $cadena = str_replace("##visibilidad##", "hidden", $cadena);
+    }elseif($mensajeNotificacion == "error_servicios_api"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "Error en la conexión con Microsoft 365, no se han podido obtener los datos de los servicios, verificar token", $cadena);
+    }elseif($mensajeNotificacion == "error_id_modificar_categoria"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "Se ha producido un error al obtener el id de la categoría que se desea modificar.", $cadena);
+    }
 
     $datosPagina = obtenerDatosPagina()->fetch_assoc();
     $cadena = str_replace("##nombrePaginaWeb##", $datosPagina['nombre'], $cadena);
@@ -182,13 +207,18 @@ function vMostrarSeccionUsuarios($usuariosDb)
 
 function vMostrarModificarCategoria($datosCategoria)
 {
-    $cadena = file_get_contents(__DIR__ . "/trozoModificarCategoria.html");
+    $cadenaHome = file_get_contents(__DIR__ . "/home.html");
+    $cadenaModificarCategoria = file_get_contents(__DIR__ . "/trozoModificarCategoria.html");
+
+
+    $trozosHome = explode("##contenido##", $cadenaHome);
+    $adminDb = obtenerAdminDb($_SESSION['id_admin'])->fetch_assoc();
+    $trozosHome[0] = str_replace("##nombreAdmin##", $adminDb['nombre_admin'], $trozosHome[0]);
 
     $categoria = $datosCategoria->fetch_assoc();
+    $cadenaModificarCategoria = str_replace("##idCategoria##", $categoria['id'], $cadenaModificarCategoria);
+    $cadenaModificarCategoria = str_replace("##nombreCategoria##", $categoria['nombre'], $cadenaModificarCategoria);
+    $cadenaModificarCategoria = str_replace("##descripcionCategoria##", $categoria['descripcion'], $cadenaModificarCategoria);
 
-    $cadena = str_replace("##idCategoria##", $categoria['id'], $cadena);
-    $cadena = str_replace("##nombreCategoria##", $categoria['nombre'], $cadena);
-    $cadena = str_replace("##descripcionCategoria##", $categoria['descripcion'], $cadena);
-
-    echo $cadena;
+    echo $trozosHome[0] . $cadenaModificarCategoria . $trozosHome[2];
 }

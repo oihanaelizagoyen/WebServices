@@ -261,7 +261,7 @@ function anadirCategoria(){
     }
     $conn = DatabaseConnSingleton::getConn();
     if ($conn->query("INSERT INTO final_Categoria (nombre, descripcion, imagen) VALUES ('" . $_POST['nombre'] . "','" . $_POST['descripcion'] . "','" . $nombrefichero . "')") == TRUE) {
-        return "ok";
+        return "correcta_creacion_categoria";
     } else {
         DatabaseConnSingleton::closeConn();
         return "error_anadir_categoria";
@@ -361,4 +361,64 @@ function eliminarServicio($id_servicio){
         return "servicio_eliminado_ok";
     }
     return "error_bd";
+}
+
+function validarGuardarDatosCategoria()
+{
+    if(isset($_POST['id_categoria']) && isset($_POST['nombre_categoria']) && isset($_POST['descripcion_categoria'])){
+        $id_categoria = $_POST['id_categoria'];
+        $nombre_categoria = $_POST['nombre_categoria'];
+        $descripcion_categoria = $_POST['descripcion_categoria'];
+
+        if ($_FILES['imagen_categoria']['size'] == 0 && $_FILES['imagen_categoria']['error'] == 0){
+            $conn = DatabaseConnSingleton::getConn();
+            if ($conn->query("UPDATE final_Categoria SET nombre='". $nombre_categoria ."', descripcion='". $descripcion_categoria ."' WHERE id=". $id_categoria .";") == TRUE) {
+                return "correcta_actualizacion_categoria";
+            } else {
+                DatabaseConnSingleton::closeConn();
+                return "error_actualizacion_categoria";
+            }
+        }
+
+        $tipo = $_FILES['imagen_categoria']['type'];
+        if ($tipo == "image/jpg") {
+            $nombrefichero = time() . "-" . uniqid() . ".jpg";
+        } elseif ($tipo = "image/jpeg") {
+            $nombrefichero = time() . "-" . uniqid() . ".jpeg";
+        } elseif ($tipo = "image/png") {
+            $nombrefichero = time() . "-" . uniqid() . ".png";
+        } elseif ($tipo = "image/gif") {
+            $nombrefichero = time() . "-" . uniqid() . ".gif";
+        } else {
+            return "error_actualizacion_categoria";
+        }
+
+        $temporal = $_FILES['imagen_categoria']['tmp_name'];
+
+        if($temporal == ""){
+            $conn = DatabaseConnSingleton::getConn();
+            if ($conn->query("UPDATE final_Categoria SET nombre='". $nombre_categoria ."', descripcion='". $descripcion_categoria ."' WHERE id=". $id_categoria .";") == TRUE) {
+                return "correcta_actualizacion_categoria";
+            } else {
+                DatabaseConnSingleton::closeConn();
+                return "error_actualizacion_categoria";
+            }
+        }
+
+        //chmod($temporal, 777);
+
+        if (!move_uploaded_file($temporal, '../imagenes/' . $nombrefichero)) {
+            return "error_actualizacion_categoria";
+        }
+
+        $conn = DatabaseConnSingleton::getConn();
+        if ($conn->query("UPDATE final_Categoria SET nombre='". $nombre_categoria ."', descripcion='". $descripcion_categoria."', imagen='". $nombrefichero ."' WHERE id=". $id_categoria .";") == TRUE) {
+            return "correcta_actualizacion_categoria";
+        } else {
+            DatabaseConnSingleton::closeConn();
+            return "error_actualizacion_categoria";
+        }
+    }else{
+        return "error_actualizacion_categoria";
+    }
 }

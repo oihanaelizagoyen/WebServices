@@ -63,7 +63,7 @@ switch ($accion) {
         if(!$datosServicios[count($datosServicios)-1]){
             vMostrarSeccionServicios($datosServicios, obtenerCategorias());
         }else{
-            vMostrarHome(obtenerDatosPagina(), "error_servicios_api");
+            vMostrarSeccionDatosPagina(obtenerDatosPagina(), "error_servicios_api");
         }
         break;
     case 'obtenerSeccionUsuarios':
@@ -75,10 +75,10 @@ switch ($accion) {
     case 'guardarDatos':
         vMostrarHome(obtenerDatosPagina(), validarGuardarDatos());
         break;
-    case 'eliminarCategoria': //TODO
+    case 'eliminarCategoria':
         if (isset($_GET['id'])){
             $idCategoria = $_GET['id'];
-
+            vMostrarHome(obtenerDatosPagina(), eliminarCategoria($idCategoria));
         }else{
             vMostrarHome(obtenerDatosPagina(), "error_id_eliminar_categoria");
         }
@@ -88,26 +88,23 @@ switch ($accion) {
             $idCategoria = $_GET['id'];
             vMostrarModificarCategoria(obtenerCategoria($idCategoria));
         }else{
-            vMostrarHome(obtenerDatosPagina(), "error_id_modificar_categoria");
+            vMostrarSeccionDatosPagina(obtenerDatosPagina(), "error_id_modificar_categoria");
         }
         break;
     case 'guardarDatosCategoria':
-        $resultado_modificar_categoria = validarGuardarDatosCategoria();
-        if ($resultado_modificar_categoria == "ok"){
-
-        }else{
-            vMostrarHome(obtenerDatosPagina(), $resultado_modificar_categoria);
-        }
+        vMostrarHome(obtenerDatosPagina(), validarGuardarDatosCategoria());
         break;
     case 'obtenerCrearNuevaCategoria':
         vMostrarCrearNuevaCategoria();
         break;
     case 'crearNuevaCategoria':
-        $resultado_creacion_categoria = anadirCategoria();
-        if($resultado_creacion_categoria == "ok"){
-            vMostrarSeccionCategoriasServicios(obtenerCategorias());
-        }else{
-            vMostrarHome(obtenerDatosPagina(), $resultado_creacion_categoria);
+        vMostrarHome(obtenerDatosPagina(), anadirCategoria());
+        break;
+    case 'cerrarSesion':
+        if($logedin == true){
+            $logedin = false;
+            session_unset();
         }
+        vMostrarIniciarSesion();
         break;
 }
