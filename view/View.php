@@ -657,7 +657,11 @@ function vMostrarIniciarSesion($datosPagina, $errores = "ok")
     //Notificaciones de errores
     if ($errores == "ok") {
         $cadena = str_replace("##visibilidad##", "hidden", $cadena);
-    } else {
+    } elseif($errores == "error_tiempo_sesion_expirado"){
+        $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
+        $cadena = str_replace("##visibilidad##", "", $cadena);
+        $cadena = str_replace("##mensajeNotificacion##", "El tiempo de la sesión ha expirado. Vuelva a iniciar sesión.", $cadena);
+    }else {
         $cadena = str_replace("##tipoAlerta##", "danger", $cadena);
         $cadena = str_replace("##visibilidad##", "", $cadena);
         $cadena = str_replace("##mensajeNotificacion##", "No se ha podido iniciar sesión", $cadena);

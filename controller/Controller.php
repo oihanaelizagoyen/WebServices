@@ -7,6 +7,7 @@ session_start();
 include __DIR__ . "/../model/Model.php";
 include __DIR__ . "/../view/View.php";
 $logedin = false;
+$mensajeInicioSesion = "ok";
 
 if (isset($_GET['accion'])) {
     $accion = $_GET['accion'];
@@ -17,19 +18,19 @@ if (isset($_GET['accion'])) {
 }
 
 if (isset($_SESSION['id_usuario']) && isset($_SESSION['contrasena']) && isset($_SESSION['tiempo'])) {
+
     $user = $_SESSION['id_usuario'];
     $passwd = $_SESSION['contrasena'];
     $tiempo = $_SESSION['tiempo'];
-    $logedin = true;
 
-    /*
-if ((time() - $tiempo) > 600) {
-    $accion = "cerrarSesion";
-    session_unset();
-} else {
-    $_SESSION['tiempo'] = time();
-}
-*/
+    if ((time() - $tiempo) > 600){
+        $mensajeInicioSesion = "error_tiempo_sesion_expirado";
+        $accion = "abrirIniciarSesion";
+        session_unset();
+    }else{
+        $logedin = true;
+        $_SESSION['tiempo'] = time();
+    }
 }
 
 switch ($accion) {
@@ -200,7 +201,7 @@ switch ($accion) {
         break;
     case 'abrirIniciarSesion':
         if ($logedin == false) {
-            vMostrarIniciarSesion(obtenerDatosPagina());
+            vMostrarIniciarSesion(obtenerDatosPagina(), $mensajeInicioSesion);
         } else {
             vMostrarHome($logedin, obtenerDatosPagina(), obtenerCategorias(), null, "error_generico");
         }
@@ -333,7 +334,7 @@ switch ($accion) {
     case 'token':
         if (isset($_POST['ftoken'])) {
             $token = $_POST['ftoken'];
-            setcookie("graph_token", $token, time() + (1800));
+            setcookie("graph_token", $token, time() + (1800), "/", "webalumnos.tlm.unavarra.es");
             echo "Token guardado";
         } else {
             echo "falta token";

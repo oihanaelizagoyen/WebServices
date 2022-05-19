@@ -13,7 +13,7 @@ if (isset($_GET['accion'])) {
 } elseif (isset($_POST['accion'])) {
     $accion = $_POST['accion'];
 } else {
-    $accion = 'mostrarIniciarSesion';
+    $accion = 'mostrarHome';
 }
 
 if($accion != 'iniciarSesion'){
@@ -53,6 +53,9 @@ switch ($accion) {
         }else{
             vMostrarIniciarSesion($resultado_inicio_sesion);
         }
+        break;
+    case 'mostrarHome':
+        vMostrarHome(obtenerDatosPagina());
         break;
     case 'obtenerSeccionDatosPagina':
         vMostrarSeccionDatosPagina(obtenerDatosPagina());

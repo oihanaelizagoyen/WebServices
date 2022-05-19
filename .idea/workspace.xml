@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dbd26ce1-6689-4ca8-8efd-9a4e94f29753" name="Default Changelist" comment="" />
+    <list default="true" id="dbd26ce1-6689-4ca8-8efd-9a4e94f29753" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/model/Curl.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/model/DatabaseConnSingleton.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/model/Model.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/model/Model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/view/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin/view/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/view/trozoModificarDatosWeb.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin/view/trozoModificarDatosWeb.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/Controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/Controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/DatabaseConnSingleton.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/DatabaseConnSingleton.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/View.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/View.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/categoria.html" beforeDir="false" afterPath="$PROJECT_DIR$/view/categoria.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,6 +31,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="28TwBApNwQlR9cQcHH0B8sXqeWP" />
   <component name="ProjectViewState">
@@ -58,10 +73,25 @@
       <workItem from="1651645833663" duration="11174000" />
       <workItem from="1651672659705" duration="3983000" />
       <workItem from="1651907256776" duration="6337000" />
+      <workItem from="1651915827397" duration="9887000" />
+      <workItem from="1651926472831" duration="255000" />
+      <workItem from="1651927701177" duration="5245000" />
+      <workItem from="1651939829239" duration="5264000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

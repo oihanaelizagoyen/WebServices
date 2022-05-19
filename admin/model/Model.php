@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . './../model/DatabaseConnSingleton.php';
-require_once __DIR__ . './../model/Curl.php';
+require_once __DIR__ . '/../../model/DatabaseConnSingleton.php';
+require_once __DIR__ . '/../../model/Curl.php';
 
 function obtenerDatosPagina()
 {

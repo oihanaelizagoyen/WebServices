@@ -2,9 +2,9 @@
 
 class DatabaseConnSingleton {
 
-    private static $dbhost = "localhost";
-    private static $dbuser = "root";
-    private static $dbpass = "";
+    private static $dbhost = "dbserver";
+    private static $dbuser = "grupo28";
+    private static $dbpass = "aimuwaK1xa";
     private static $db = "db_grupo28";
     private static $conn = null;
 
